@@ -299,6 +299,37 @@ O hash SHA-256 da versão utilizada nos experimentos foi armazenado em:
 A partir deste ponto, as regras de pré-processamento não serão modificadas
 com base nos resultados de recuperação, evitando ajustes pós-hoc das variantes.
 
+## 8.3 Testes automatizados do pré-processamento
+
+Além da inspeção manual das transformações P0–P4, foi criada uma suíte
+automatizada de testes com `pytest`.
+
+Foram verificados:
+
+- preservação integral do texto em P0;
+- aplicação de lowercase em P1;
+- preservação de relações temporais;
+- preservação de negação;
+- preservação de operadores de comparação;
+- preservação de intervalos e valores numéricos;
+- remoção de stopwords em P2;
+- lematização em P3;
+- stemming em P4;
+- garantia de que nenhuma variante produz texto vazio.
+
+Resultado:
+
+`10 passed`
+
+A saída completa da execução foi armazenada em:
+
+`results/runs/preprocessing_tests.txt`
+
+Os testes foram executados antes da avaliação comparativa dos rankings P0–P4.
+
+
+
+
 # 9. Construção dos corpora derivados
 
 A partir dos 6.900 chunks preservados da baseline P0, foram gerados quatro
