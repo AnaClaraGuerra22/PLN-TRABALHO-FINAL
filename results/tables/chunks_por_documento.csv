@@ -1,0 +1,40 @@
+﻿id_canonico;tipo_documento;parte;chapter_number_original;documento;chunks;percentual_corpus
+chapter_01;Chapter;Part I;1;Part_I_Cap_01_Geology and Geodiversity of the Amazon Three Billion Years of History;243;3.52
+chapter_02;Chapter;Part I;2;Part_I_Cap_02_Evolution of Amazonian Biodiversity;229;3.32
+chapter_03;Chapter;Part I;3;Part_I_Cap_03_Biological Diversity and Ecological Networks in the Amazon;255;3.7
+chapter_04;Chapter;Part I;4;Part_I_Cap_04_Amazonian Ecosystems and Their Ecological Functions;185;2.68
+chapter_05;Chapter;Part I;5;Part_I_Cap_05_The Physical Hydroclimate System of the Amazon;184;2.67
+chapter_06;Chapter;Part I;6;Part_I_Cap_06_Biogeochemical Cycles in the Amazon;264;3.83
+chapter_07;Chapter;Part I;7;Part_I_Cap_07_Biogeophysical Cycles Water Recycling, Climate Regulation;117;1.7
+chapter_08;Chapter;Part I;8;Part_I_Cap_08_Peoples of the Amazon Before European Colonization;192;2.78
+chapter_09;Chapter;Part I;9;Part_I_Cap_09_Peoples of the Amazon and European Colonization (16th-18th Centuries);188;2.72
+chapter_10;Chapter;Part I;10;Part_I_Cap_10_Critical Interconnections Between the Cultural and Biological Diversity of Amazonian Peoples and Ecosystems;183;2.65
+chapter_11;Chapter;Part I;11;Part_I_Cap_11_Economic Drivers in the Amazon from the 19th Century to the 1970s;148;2.14
+chapter_12;Chapter;Part I;12;Part_I_Cap_12_Languages of the Amazon Dimensions of Diversity;128;1.86
+chapter_13;Chapter;Part I;13;Part_I_Cap_13_African Presence in the Amazon A Glance;163;2.36
+chapter_14;Chapter;Part II;14;Part_II_Cap_14_Amazon in Motion Changing Politics, Development Strategies, Peoples, Landscapes, and Livelihoods;411;5.96
+chapter_15;Chapter;Part II;15;Part_II_Cap_15_Complex, Diverse, and Changing Agribusiness and Livelihood Systems in the Amazon;328;4.75
+chapter_16;Chapter;Part II;16;Part_II_Cap_16_The State of Conservation Policies, Protected Areas, and Indigenous Territories, from the Past to the Present;202;2.93
+chapter_17;Chapter;Part II;17;Part_II_Cap_17_Globalization, Extractivism, and Social Exclusion Threats and Opportunities to Amazon Governance in Brazil;180;2.61
+chapter_18;Chapter;Part II;18;Part_II_Cap_18_Globalization, Extractivism, and Social Exclusion Country-Specific Manifestations;263;3.81
+chapter_19;Chapter;Part II;19;Part_II_Cap_19_Drivers and Ecological Impacts of Deforestation and Forest Degradation;203;2.94
+chapter_20;Chapter;Part II;20;Part_II_Cap_20_Drivers and Impacts of Changes in Aquatic Ecosystems;215;3.12
+chapter_21;Chapter;Part II;21;Part_II_Cap_21_Human Well-Being and Health Impacts of the Degradation of Terrestrial and Aquatic Ecosystems;133;1.93
+chapter_22;Chapter;Part II;22;Part_II_Cap_22_Long-Term Variability, Extremes, and Changes in Temperature and Hydro Meteorology;175;2.54
+chapter_23;Chapter;Part II;23;Part_II_Cap_23_Impacts of Deforestation and Climate Change on Biodiversity, Ecological Processes, and Environmental Adaptation;203;2.94
+chapter_24;Chapter;Part II;24;Part_II_Cap_24_Resilience of the Amazon Forest to Global Changes Assessing the Risk of Tipping Points;179;2.59
+chapter_25;Chapter;Part III;25;Part_III_Cap_25_A Pan-Amazonian sustainable development vision;193;2.8
+chapter_26;Chapter;Part III;26;Part_III_Cap_26_Sustainable Development Goals (SDGs) and the Amazon;155;2.25
+chapter_27;Chapter;Part III;27;Part_III_Cap_27_Conservation measures to counter the main threats to Amazonian biodiversity;92;1.33
+chapter_28;Chapter;Part III;28;Part_III_Cap_28_Restoration options for the Amazon;178;2.58
+chapter_29;Chapter;Part III;29;Part_III_Cap_29_Restoration priorities and benefits within landscapes and catchments and across the Amazon Basin;167;2.42
+chapter_30;Chapter;Part III;30;Part_III_Cap_30_Opportunities and challenges for a healthy standing forest and flowing rivers bioeconomy in the Amazon;316;4.58
+chapter_31;Chapter;Part III;31;Part_III_Cap_31_Strengthening land and natural resource governance and management Protected areas, Indigenous lands, and local communities’ territories;178;2.58
+chapter_32;Chapter;Part III;32;Part_III_Cap_32_Milestones and challenges in the construction and expansion of participatory intercultural education in the Amazon;144;2.09
+chapter_33;Chapter;Part III;33;Part_III_Cap_33_Connecting and sharing diverse knowledges to support sustainable pathways in the Amazon;207;3.0
+chapter_34;Chapter;Part III;34;Part_III_Cap_34_Boosting relations between the Amazon forest and its globalizing cities;168;2.43
+cross_chapter_1;Cross Chapter;Part I;1;Part_I_Cap_01_Cross Chapter 1 The Amazon Carbon Budget;61;0.88
+cross_chapter_2;Cross Chapter;Part I;2;Part_I_Cap_02_Cross Chapter 2 Legacy from the Ancestors Amazonian Biocultural Landscapes and Global Sustainability in a Post-COVID-19 World;18;0.26
+annex_01;Annex;Annex;Annex I;Annex_01_Annex I;20;0.29
+annex_02;Annex;Annex;Annex II;Annex_02_Annex II;32;0.46
+TOTAL;;;;Corpus completo;6900;100.0

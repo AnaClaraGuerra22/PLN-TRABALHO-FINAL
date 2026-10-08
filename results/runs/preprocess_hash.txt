@@ -1,0 +1,6 @@
+﻿
+Algorithm       Hash                                                                   Path                            
+---------       ----                                                                   ----                            
+SHA256          050AEC627D8DA62FAC2F0B8E364FDC9D3102368F1464B17240187E964ACA6610       C:\Users\anacl\OneDrive\Área ...
+
+
