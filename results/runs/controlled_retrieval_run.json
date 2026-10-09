@@ -1,0 +1,39 @@
+{
+  "timestamp": "2026-10-08T21:18:21.851245",
+  "python": "3.13.3",
+  "chromadb": "1.5.5",
+  "langchain_huggingface": "1.2.1",
+  "sentence_transformers": "5.3.0",
+  "embedding_model": "sentence-transformers/all-mpnet-base-v2",
+  "embedding_dimension": 768,
+  "collection": "langchain",
+  "top_k": 10,
+  "questions_per_variant": 130,
+  "variants": [
+    "P0",
+    "P1",
+    "P2",
+    "P3",
+    "P4"
+  ],
+  "total_queries": 650,
+  "total_ranking_rows": 6500,
+  "downstream_cases": 32,
+  "downstream_top5_rows": 800,
+  "database_counts": {
+    "P0": 6900,
+    "P1": 6900,
+    "P2": 6900,
+    "P3": 6900,
+    "P4": 6900
+  },
+  "question_file_hashes": {
+    "P0": "39cff97c889abaa487a4d8937c30c180b39619b8080b5d506a9771750b1fed4c",
+    "P1": "af3d568de1353f48408fcc29fead75f69e094100fb2702347128c4ef75931144",
+    "P2": "31e54cda5451e7e26bb92c4a4d142125e002783647460c8c6b8519d15e341dac",
+    "P3": "9156f4c3b975dd1e0dd93403a91aee9d5ba89c3699c12e924a487833c49d5bff",
+    "P4": "1f10f191672c26028d558a12294f9264ef4bc368ec41ed5d2af3bbc24bd0f2ac"
+  },
+  "p0_corpus_sha256": "1fce41571ca46ccca48c9aaf2fc07013aa7fe6bd215305350365eb451a73fae8",
+  "downstream_cases_sha256": "ea950e45e21654bdc8313a53bb50add8929de093279671e8f1c3a6c1d451225a"
+}

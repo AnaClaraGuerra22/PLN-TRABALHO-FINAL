@@ -1,50 +1,40 @@
 # Impacto do Pré-processamento Linguístico na Recuperação Semântica de Documentos Científicos
 
-Trabalho Final da disciplina **INF 791 — Processamento de Linguagem Natural**, desenvolvido a partir do corpus e do benchmark construídos no projeto **AmazoniaExpert.IA**.
-
----
+Trabalho Final da disciplina **INF 791 - Processamento de Linguagem Natural**, desenvolvido a partir do corpus e do benchmark construídos no projeto **AmazoniaExpert.IA**.
 
 ## 1. Visão geral
 
-Este projeto investiga o efeito de diferentes estratégias clássicas de pré-processamento linguístico sobre a recuperação semântica de documentos científicos utilizando embeddings densos.
+Este projeto investiga como diferentes estratégias clássicas de pré-processamento linguístico afetam a recuperação semântica de documentos científicos sobre a Amazônia.
 
-A questão central do experimento é:
+Pergunta principal:
 
 > **Como diferentes estratégias de pré-processamento linguístico afetam a recuperação semântica de capítulos de origem de perguntas científicas sobre a Amazônia?**
 
-O experimento utiliza documentos científicos produzidos pelo **Science Panel for the Amazon (SPA)** e perguntas pertencentes ao benchmark **SPAmazon-QA**.
+O experimento principal isola a etapa de retrieval. Corpus, chunks, IDs, metadados, encoder, banco vetorial, parâmetros de busca e conjunto de perguntas permanecem controlados; a variável experimental é a preparação linguística aplicada ao texto.
 
-A arquitetura avaliada utiliza:
-
-- embeddings densos;
-- `sentence-transformers/all-mpnet-base-v2`;
-- ChromaDB;
-- índice HNSW;
-- recuperação Top-k;
-- avaliação baseada no capítulo de origem da pergunta.
-
-O objetivo não é avaliar geração de respostas por LLM, mas isolar especificamente o comportamento da etapa de **recuperação semântica**.
+Além da análise principal de recuperação, o projeto inclui uma **análise secundária downstream em casos críticos**, para verificar se mudanças no contexto recuperado também se traduzem em melhora ou piora da resposta final do RAG.
 
 ---
 
 ## 2. Corpus
 
-O corpus utilizado neste experimento é derivado da base documental do AmazoniaExpert.IA.
-
-Após auditoria, foram identificados:
+O corpus foi exportado da base vetorial utilizada no AmazoniaExpert.IA e auditado antes dos novos experimentos.
 
 | Característica | Valor |
 |---|---:|
 | Documentos científicos | 38 |
 | Chunks | 6.900 |
+| IDs únicos de chunks | 6.900 |
 | Capítulos regulares | 34 |
 | Cross Chapters | 2 |
 | Anexos | 2 |
 | Dimensionalidade dos embeddings | 768 |
 
-Os 38 documentos correspondem a 34 capítulos regulares, dois Cross Chapters e dois anexos.
+O texto armazenado na baseline preserva a estrutura utilizada na vetorização original:
 
-Cada chunk mantém os metadados de origem, incluindo documento, capítulo, seção e página.
+```text
+Chapter + Section + Content
+```
 
 ---
 
@@ -57,8 +47,8 @@ A avaliação utiliza o **SPAmazon-QA**, conjunto curado de perguntas e resposta
 | Perguntas | 130 |
 | IDs únicos | 130 |
 | Documentos-alvo canônicos | 38 |
-| Perguntas Direct | 53 |
-| Perguntas Indirect | 77 |
+| Direct | 53 |
+| Indirect | 77 |
 
 ### Distribuição por dificuldade
 
@@ -69,13 +59,20 @@ A avaliação utiliza o **SPAmazon-QA**, conjunto curado de perguntas e resposta
 | Medium-High | 16 |
 | Hard | 79 |
 
-O campo `capitulo_alvo` apresentou originalmente 39 grafias diferentes, normalizadas para 38 identificadores canônicos.
+O arquivo original `SPAmazon-QA.json` não é sobrescrito. Rankings, métricas e novos resultados são salvos separadamente.
+
+---
+
+## 4. Canonicalização dos documentos
+
+O campo `capitulo_alvo` possui 39 grafias distintas, normalizadas para 38 origens canônicas.
 
 Exemplo:
 
 ```text
 Capítulo CC2
 Capítulo Cross Chapter 2
+cc2
 cross_chapter_2
 ```
 
@@ -85,13 +82,7 @@ são tratados como:
 cross_chapter_2
 ```
 
----
-
-## 4. Auditoria dos metadados
-
-Durante a preparação do experimento foi identificada uma ambiguidade nos metadados históricos do corpus.
-
-No banco original:
+Durante a auditoria também foi identificada uma ambiguidade herdada dos metadados históricos:
 
 ```text
 Chapter 1       -> chapter_number = 1
@@ -101,9 +92,7 @@ Chapter 2       -> chapter_number = 2
 Cross Chapter 2 -> chapter_number = 2
 ```
 
-Entretanto, o campo `source` distingue corretamente esses documentos.
-
-Por esse motivo, a avaliação atual deriva o identificador canônico do documento prioritariamente a partir de `source`, preservando os metadados originais sem modificá-los.
+Como o campo `source` distingue corretamente esses documentos, o identificador canônico atual é derivado prioritariamente de `source`, preservando os metadados originais para auditoria.
 
 | Documento | Chunks |
 |---|---:|
@@ -112,7 +101,7 @@ Por esse motivo, a avaliação atual deriva o identificador canônico do documen
 | Chapter 2 | 229 |
 | Cross Chapter 2 | 18 |
 
-A distribuição completa está disponível em:
+A distribuição completa está em:
 
 ```text
 results/tables/chunks_por_documento.csv
@@ -122,8 +111,6 @@ results/tables/chunks_por_documento.csv
 
 ## 5. Variantes de pré-processamento
 
-Foram definidas cinco condições experimentais.
-
 | Variante | Transformação |
 |---|---|
 | **P0** | Texto original, sem novo pré-processamento |
@@ -132,88 +119,49 @@ Foram definidas cinco condições experimentais.
 | **P3** | Lowercase + lematização |
 | **P4** | Lowercase + Porter stemming |
 
-As mesmas transformações são aplicadas tanto aos chunks quanto às consultas.
+A mesma variante é aplicada aos chunks e às consultas.
 
----
+### Termos semanticamente protegidos
 
-## 6. Preservação de relações semanticamente críticas
+Para evitar a remoção ou deformação deliberada de operadores críticos, foi congelada antes dos resultados uma lista de termos protegidos, incluindo palavras relacionadas a:
 
-A remoção indiscriminada de stopwords pode eliminar palavras pequenas que carregam relações fundamentais para uma consulta científica.
-
-Por esse motivo, foi definida previamente uma lista de operadores protegidos relacionados a temporalidade, negação, comparação, quantificação e relações lógicas.
+- temporalidade;
+- negação;
+- lógica;
+- quantificação;
+- comparação e direção.
 
 Exemplos:
 
 ```text
-since
-before
-after
-between
-from
-to
-
-not
-no
-without
-
-greater
-higher
-lower
-more
-less
-than
-
-all
-same
-each
-every
-
-and
-or
-but
+since, before, after, between, from, to
+not, no, without
+and, or, but
+all, same, every
+more, less, greater, higher, lower, than
 ```
 
-Essa lista foi definida **antes da comparação dos resultados de recuperação**, evitando ajustes pós-hoc das variantes.
+Essa política não será alterada depois da observação dos rankings P0-P4.
 
 ---
 
-## 7. Validação do pré-processamento
+## 6. Validação do pré-processamento
 
-Antes da criação dos índices experimentais, as transformações foram inspecionadas manualmente em consultas representativas de temporalidade, negação, comparação, quantidade, siglas e intervalos numéricos.
+As transformações foram inspecionadas manualmente com exemplos de:
 
-Exemplo temporal:
+- temporalidade;
+- temporalidade oposta;
+- negação;
+- comparação;
+- quantidades, siglas e intervalos numéricos.
 
-```text
-P0:
-Name three major commodity or extractive activities that expanded
-in the Amazon since the 1970s.
-
-P1:
-name three major commodity or extractive activities that expanded
-in the amazon since the 1970s.
-
-P2:
-name three major commodity or extractive activities expanded
-amazon since 1970s.
-
-P3:
-name three major commodity or extractive activity that expand
-in the amazon since the 1970s.
-
-P4:
-name three major commod or extract activ that expand
-in the amazon since the 1970s.
-```
-
-A saída completa está em:
+A inspeção completa está em:
 
 ```text
 results/runs/preprocessing_validation_final.txt
 ```
 
-Também foi criada uma suíte automatizada com `pytest`.
-
-Resultado:
+Também foi criada uma suíte automatizada de testes:
 
 ```text
 10 passed
@@ -225,11 +173,17 @@ Arquivo:
 tests/test_preprocessing.py
 ```
 
+Hash SHA-256 da implementação congelada em `src/preprocess.py`:
+
+```text
+050AEC627D8DA62FAC2F0B8E364FDC9D3102368F1464B17240187E964ACA6610
+```
+
 ---
 
-## 8. Corpora derivados
+## 7. Corpora derivados
 
-Os quatro corpora derivados foram construídos a partir exatamente dos mesmos 6.900 registros da baseline.
+P1-P4 foram construídos a partir exatamente dos mesmos 6.900 registros de P0.
 
 Todas as variantes preservaram:
 
@@ -237,67 +191,29 @@ Todas as variantes preservaram:
 6.900 chunks
 6.900 IDs únicos
 38 documentos
-0 chunks vazios
+0 textos vazios
 0 alterações nos metadados
 ```
 
-### Alteração no tamanho textual
-
-| Variante | Redução de caracteres |
-|---|---:|
-| P1 | 0,00% |
-| P2 | 11,28% |
-| P3 | 2,98% |
-| P4 | 11,06% |
-
-P1 altera a caixa dos caracteres, mas não o comprimento dos textos.
+| Variante | Redução de caracteres | SHA-256 |
+|---|---:|---|
+| P0 | - | `1fce41571ca46ccca48c9aaf2fc07013aa7fe6bd215305350365eb451a73fae8` |
+| P1 | 0,00% | `0e1efcd0f921f08956529d89eb0ff267d221fbf494458c655e5e7e6eff1c3c6a` |
+| P2 | 11,28% | `48dc79cf004d56c5f25905532564fc8a0f4018f6c15fdbe241c2e6b2f8103447` |
+| P3 | 2,98% | `ae8b5ad596327372a3b5b6cf8e92a422db99ac45daae7e8f288e86e325302e99` |
+| P4 | 11,06% | `70fd5435015ba57aea468b8148190c1cc619e69796b8b33c6871cbb55ca62ded` |
 
 ---
 
-## 9. Reprodutibilidade dos corpora
+## 8. Indexação vetorial controlada
 
-Hashes SHA-256:
-
-```text
-P0
-1fce41571ca46ccca48c9aaf2fc07013aa7fe6bd215305350365eb451a73fae8
-
-P1
-0e1efcd0f921f08956529d89eb0ff267d221fbf494458c655e5e7e6eff1c3c6a
-
-P2
-48dc79cf004d56c5f25905532564fc8a0f4018f6c15fdbe241c2e6b2f8103447
-
-P3
-ae8b5ad596327372a3b5b6cf8e92a422db99ac45daae7e8f288e86e325302e99
-
-P4
-70fd5435015ba57aea468b8148190c1cc619e69796b8b33c6871cbb55ca62ded
-```
-
-SHA-256 de `src/preprocess.py`:
-
-```text
-050AEC627D8DA62FAC2F0B8E364FDC9D3102368F1464B17240187E964ACA6610
-```
-
-Também disponível em:
-
-```text
-results/runs/preprocess_hash.txt
-```
-
----
-
-## 10. Indexação vetorial
-
-O modelo utilizado em todas as condições é:
+Modelo fixo:
 
 ```text
 sentence-transformers/all-mpnet-base-v2
 ```
 
-Características:
+Configuração:
 
 ```text
 Dimensionalidade: 768
@@ -306,191 +222,372 @@ Banco vetorial: ChromaDB
 Coleção: langchain
 ```
 
-Para garantir um experimento controlado, os cinco índices experimentais são reconstruídos sob as mesmas condições:
+Para reduzir diferenças causadas pela construção histórica do HNSW, o experimento principal reconstrói cinco índices sob as mesmas condições:
 
 ```text
-P0
+P0_CONTROLLED
 P1
 P2
 P3
 P4
 ```
 
-Todos utilizam os mesmos 6.900 IDs, a mesma ordem de inserção, os mesmos metadados, o mesmo encoder, a mesma dimensionalidade, o mesmo tamanho de lote e a mesma configuração do banco vetorial.
+Todos utilizam os mesmos IDs, a mesma ordem de inserção, os mesmos metadados, o mesmo encoder e o mesmo batch size.
 
-Assim, a principal variável experimental é a representação textual fornecida ao modelo de embeddings.
-
-Os bancos vetoriais não são armazenados no GitHub por serem artefatos binários reconstruíveis.
+Os bancos experimentais são mantidos fora do OneDrive e não são versionados no Git por serem artefatos binários reconstruíveis.
 
 ---
 
-## 11. Protocolo de recuperação
+## 9. Protocolo principal de recuperação
 
-Cada uma das 130 perguntas é submetida separadamente às cinco condições:
+Cada uma das 130 perguntas é submetida às cinco condições:
 
 ```text
 130 perguntas x 5 variantes = 650 consultas
 ```
 
-Para cada consulta são armazenados os **10 chunks mais próximos**:
+Para cada consulta são armazenados os 10 chunks mais próximos:
 
 ```text
 130 perguntas x 5 variantes x Top-10
 = 6.500 posições de ranking
 ```
 
-A avaliação considera o primeiro chunk pertencente ao documento de origem da pergunta.
-
----
-
-## 12. Métricas
-
-São utilizadas:
-
-- **Hit@1**
-- **Hit@3**
-- **Hit@5**
-- **Hit@10**
-- **First Relevant Rank**
-- **MRR@10**
-
-Hit@k indica se pelo menos um chunk do documento de origem foi recuperado entre os primeiros `k` resultados.
-
-MRR@10 considera o inverso da posição do primeiro resultado correto até a posição 10:
+Fluxo:
 
 ```text
-MRR@10 = média(1 / rank do primeiro resultado correto)
+query original
+    |
+    v
+preprocessamento Pk
+    |
+    v
+embedding all-mpnet-base-v2
+    |
+    v
+índice Pk
+    |
+    v
+Top-10
+    |
+    v
+canonicalização do documento
+    |
+    v
+métricas
 ```
-
-As métricas representam a capacidade de **localizar o documento de origem** da pergunta e não devem ser interpretadas diretamente como avaliação da qualidade final de uma resposta gerada.
 
 ---
 
-## 13. Reprodução da baseline histórica
+## 10. Métricas
 
-Antes dos experimentos P1–P4 foi realizada uma reprodução da recuperação original do AmazoniaExpert.IA.
+Métricas principais:
+
+- **Chapter Hit@1**
+- **Chapter Hit@3**
+- **Chapter Hit@5**
+- **Chapter Hit@10**
+- **First Relevant Rank**
+- **MRR@10**
+- **Delta vs P0_CONTROLLED**
+
+O capítulo de origem funciona como uma **proxy operacional de relocalização da fonte**. Um chunk de outro capítulo pode conter evidência cientificamente válida; portanto, Chapter Hit@k não deve ser interpretado como julgamento absoluto de relevância por chunk.
+
+---
+
+## 11. Reprodução da baseline histórica
+
+A reprodução do banco P0 preservado produziu:
 
 | Métrica | Resultado |
 |---|---:|
-| Hit@1 | 79,23% |
-| Hit@3 | 90,00% |
-| Hit@5 | 93,08% |
-| Hit@10 | 95,38% |
+| Hit@1 | 103/130 - 79,23% |
+| Hit@3 | 117/130 - 90,00% |
+| Hit@5 | 121/130 - 93,08% |
+| Hit@10 | 124/130 - 95,38% |
 | MRR@10 | 0,8507 |
 
-No experimento histórico do TCC, o indicador equivalente ao Hit@5 havia registrado:
+No TCC histórico, o indicador operacional equivalente ao Hit@5 havia registrado 118/130, ou 90,8%.
 
-```text
-118/130
-90,8%
-```
-
-A reprodução atual apresentou concordância em:
+A reprodução atual concordou com o histórico em:
 
 ```text
 127/130 consultas
 97,69%
 ```
 
-As únicas divergências foram os IDs 96, 97 e 98, todos pertencentes ao **Annex II**.
-
-Na base atualmente preservada, o Annex II foi recuperado na primeira posição para essas três consultas.
-
-Essa diferença é registrada como uma divergência de reprodução. Os artefatos disponíveis não permitem determinar com segurança se ela decorre de reconstrução anterior do índice, alteração do estado do banco ou outra diferença histórica.
+As três divergências foram os IDs 96, 97 e 98, todos do Annex II. A diferença foi registrada como divergência de reprodução, sem atribuição causal não comprovada.
 
 ---
 
-## 14. Caso sentinela: relações temporais
+## 12. Caso sentinela - relações temporais
 
-A Questão 11 do SPAmazon-QA foi selecionada como caso sentinela para relações temporais.
+A Questão 11 é acompanhada como caso sentinela para temporalidade.
 
-A pergunta solicita atividades que se expandiram:
+A pergunta exige atividades que se expandiram:
 
 ```text
 since the 1970s
 ```
 
-Entretanto, a baseline P0 recuperou predominantemente:
+A baseline P0 recuperou predominantemente:
 
 ```text
 Chapter 11
 Economic Drivers in the Amazon from the 19th Century to the 1970s
 ```
 
-Ranking P0:
+O Chapter 17, documento-alvo, não apareceu no Top-10.
+
+O caso evidencia que alta proximidade temática não garante preservação da relação temporal:
 
 ```text
-1  -> Chapter 11
-2  -> Chapter 11
-3  -> Chapter 11
-4  -> Chapter 11
-5  -> Chapter 11
-6  -> Chapter 11
-7  -> Chapter 14
-8  -> Chapter 11
-9  -> Chapter 11
-10 -> Chapter 11
+since the 1970s != to the 1970s
 ```
-
-O documento-alvo, **Chapter 17**, não apareceu no Top-10.
-
-O caso evidencia a distinção entre:
-
-```text
-since the 1970s
-```
-
-e:
-
-```text
-to the 1970s
-```
-
-Apesar da alta proximidade temática, as duas expressões possuem relações temporais diferentes.
-
-Esse caso será acompanhado individualmente nas variantes P1–P4.
 
 ---
 
-## 15. Estrutura do repositório
+# 13. Análise secundária downstream dos casos críticos
+
+Além do experimento principal de retrieval, será executada uma análise de causa-raiz em um subconjunto fixado **antes de observar os resultados P1-P4**.
+
+## Regra de seleção
+
+Um caso entra no subconjunto quando:
+
+```text
+nota histórica do AmazoniaExpert.IA <= 3
+OU
+capitulo_recuperado histórico == False
+```
+
+No SPAmazon-QA isso produz:
+
+- 23 casos com nota histórica 1, 2 ou 3;
+- 12 casos históricos com falha de recuperação;
+- 3 casos pertencentes aos dois grupos: 11, 102 e 124;
+- **32 casos críticos únicos**.
+
+Distribuição das notas baixas:
+
+| Nota | Casos |
+|---|---:|
+| 1 | 1 |
+| 2 | 4 |
+| 3 | 18 |
+
+IDs selecionados:
+
+```text
+9, 11, 15, 27, 34, 35, 36, 53, 58, 59, 63, 65, 67, 72, 77, 83,
+90, 96, 97, 98, 99, 100, 102, 104, 105, 106, 110, 116, 117, 124, 125, 126
+```
+
+Essa seleção prévia evita escolher apenas casos que posteriormente favoreçam alguma variante.
+
+---
+
+## 14. Pipeline downstream: retrieval separado da geração
+
+O texto processado de P1-P4 é usado para recuperar, mas **não será entregue diretamente ao gerador**.
+
+Para cada variante:
+
+```text
+pergunta
+   |
+   v
+preprocessamento Pk
+   |
+   v
+índice Pk
+   |
+   v
+Top-5 chunk IDs
+   |
+   v
+lookup dos mesmos IDs em p0_chunks.jsonl
+   |
+   v
+texto ORIGINAL dos 5 chunks
+   |
+   v
+ClimateChat
+   |
+   v
+resposta Pk
+   |
+   v
+Juiz LLM
+```
+
+Essa decisão isola o efeito do pré-processamento na **seleção do contexto**, sem confundir retrieval com possíveis danos de legibilidade causados por stemming, lematização ou remoção de stopwords.
+
+O experimento principal continua usando Top-10 para métricas. A geração downstream usa Top-5 para manter proximidade com a arquitetura original do AmazoniaExpert.IA.
+
+---
+
+## 15. Geração ClimateChat nos casos críticos
+
+Configuração a ser reproduzida do TCC:
+
+```text
+temperature = 0.1
+top_p = 0.9
+repeat_penalty = 1.15
+max_tokens = 2048
+n_ctx = 8192
+```
+
+Será utilizado o mesmo modelo local ClimateChat em GGUF e o mesmo prompt final do AmazoniaExpert.IA, com restrição para responder a partir do contexto recuperado.
+
+Para cada um dos 32 casos serão geradas respostas com:
+
+```text
+P0_CONTROLLED
+P1
+P2
+P3
+P4
+```
+
+Total:
+
+```text
+32 casos x 5 condições = 160 novas respostas
+```
+
+---
+
+## 16. Juiz LLM na análise downstream
+
+O protocolo de avaliação seguirá o desenho utilizado no TCC:
+
+```text
+Modelo: llama-3.3-70b-versatile
+Infraestrutura: Groq
+Temperature: 0.0
+Persona: Professor Doutor especialista na Amazônia
+Entrada: pergunta + gabarito + resposta
+Saída: JSON com nota 1-5 + justificativa
+```
+
+Escala:
+
+| Nota | Interpretação |
+|---|---|
+| 1 | Incorreta / irrelevante |
+| 2 | Insuficiente, com erros graves ou omissões centrais |
+| 3 | Parcial, correta em parte, mas incompleta ou superficial |
+| 4 | Boa, majoritariamente correta, com falhas mínimas |
+| 5 | Excelente, completa e cientificamente aderente |
+
+### Controle de possível drift do juiz
+
+As notas históricas do TCC serão preservadas, mas não serão a única base de comparação.
+
+As 32 respostas históricas do AmazoniaExpert.IA também serão submetidas novamente ao juiz atual, na mesma rodada das novas respostas.
+
+Assim, o conjunto de avaliação atual terá:
+
+```text
+32 respostas históricas reavaliadas
++ 32 P0_CONTROLLED
++ 32 P1
++ 32 P2
++ 32 P3
++ 32 P4
+= 192 avaliações atuais do Juiz LLM
+```
+
+Se o modelo original do juiz não estiver mais disponível, qualquer substituição deverá ser registrada e as notas novas não serão tratadas como diretamente equivalentes às históricas.
+
+---
+
+## 17. Análise dos 32 casos críticos
+
+Para cada pergunta serão comparados:
+
+- nota histórica;
+- nota atual da resposta histórica;
+- rank do primeiro documento correto em P0-P4;
+- capítulos presentes no Top-5;
+- resposta P0_CONTROLLED;
+- respostas P1-P4;
+- notas e justificativas atuais do juiz.
+
+Principais deltas:
+
+```text
+DeltaJudge(P1) = Nota(P1) - Nota(P0_CONTROLLED)
+DeltaJudge(P2) = Nota(P2) - Nota(P0_CONTROLLED)
+DeltaJudge(P3) = Nota(P3) - Nota(P0_CONTROLLED)
+DeltaJudge(P4) = Nota(P4) - Nota(P0_CONTROLLED)
+```
+
+Serão contabilizados:
+
+- casos que melhoraram;
+- empates;
+- casos que pioraram;
+- média e mediana das notas;
+- transições de nota, por exemplo `3 -> 4`;
+- retrieval melhorou + resposta melhorou;
+- retrieval melhorou + resposta não melhorou;
+- retrieval piorou + resposta piorou;
+- resposta mudou sem mudança relevante no rank.
+
+Como o subconjunto foi selecionado por falha ou baixa nota histórica, essa etapa é tratada como **análise exploratória de causa-raiz**, não como estimativa global das 130 perguntas.
+
+---
+
+## 18. Arquivos planejados para a etapa downstream
+
+```text
+data/reference/downstream_critical_cases.jsonl
+results/tables/downstream_critical_cases.csv
+results/raw/downstream_retrieval_top5.csv
+results/raw/downstream_generated_answers.csv
+results/raw/downstream_judge_scores.csv
+results/metrics/downstream_summary.csv
+results/cases/downstream_case_reports/
+```
+
+---
+
+## 19. Estrutura do repositório
 
 ```text
 PLN-TRABALHO-FINAL/
-│
-├── data/
-│   ├── reference/
-│   │   ├── p0_chunks.jsonl
-│   │   └── spamazon_qa_questions.jsonl
-│   └── processed/
-│       ├── p1_chunks.jsonl
-│       ├── p2_chunks.jsonl
-│       ├── p3_chunks.jsonl
-│       └── p4_chunks.jsonl
-│
-├── docs/
-│   └── registro_experimental.md
-│
-├── results/
-│   ├── cases/
-│   ├── metrics/
-│   ├── raw/
-│   ├── runs/
-│   └── tables/
-│
-├── scripts/
-├── src/
-├── tests/
-│
-├── SPAmazon-QA.json
-├── Roteiro_Trabalho_Final_PLN.pdf
-└── README.md
+|
++-- data/
+|   +-- reference/
+|   +-- processed/
+|
++-- docs/
+|   +-- registro_experimental.md
+|
++-- results/
+|   +-- cases/
+|   +-- metrics/
+|   +-- raw/
+|   +-- runs/
+|   +-- tables/
+|
++-- scripts/
++-- src/
++-- tests/
+|
++-- SPAmazon-QA.json
++-- Roteiro_Trabalho_Final_PLN.pdf
++-- README.md
 ```
 
 ---
 
-## 16. Principais comandos
+## 20. Principais comandos já utilizados
 
-### Validar documentos do corpus
+### Validar corpus
 
 ```powershell
 python .\scripts\validate_p0_chapters.py
@@ -502,7 +599,7 @@ python .\scripts\validate_p0_chapters.py
 python .\scripts\validate_spamazon_qa.py
 ```
 
-### Inspecionar transformações linguísticas
+### Inspecionar pré-processamento
 
 ```powershell
 python .\scripts\inspect_preprocessing.py
@@ -514,23 +611,58 @@ python .\scripts\inspect_preprocessing.py
 pytest .\tests\test_preprocessing.py -v
 ```
 
-### Construir corpora P1–P4
+### Gerar corpora P1-P4
 
 ```powershell
 python .\scripts\build_preprocessed_corpora.py
 ```
 
-### Construir índices controlados P0–P4
+### Construir os índices controlados
 
 ```powershell
-python .\scripts\build_controlled_vector_dbs.py
+& "C:\TCCII\UNSTRUCTURED\.venv\Scripts\python.exe" `
+".\scripts\build_controlled_vector_dbs.py"
 ```
 
 ---
 
-## 17. Registro experimental
+## 21. Status atual
 
-Decisões metodológicas, auditorias, divergências de reprodução e resultados intermediários são registrados continuamente em:
+### Concluído
+
+- auditoria do corpus P0;
+- exportação dos 6.900 chunks;
+- identificação dos 38 documentos canônicos;
+- validação das 130 perguntas;
+- reprodução da baseline histórica;
+- definição e congelamento de P0-P4;
+- validação manual do pré-processamento;
+- 10 testes automatizados aprovados;
+- geração e auditoria dos corpora P1-P4;
+- hashes para reprodutibilidade;
+- documentação experimental e README.
+
+### Em execução
+
+- construção controlada dos índices P0-P4.
+
+### Próximos passos
+
+1. validar os cinco índices;
+2. executar 650 consultas e salvar 6.500 posições de ranking;
+3. calcular Hit@k e MRR@10;
+4. comparar P1-P4 com P0_CONTROLLED;
+5. analisar por tipo e dificuldade;
+6. materializar os 32 casos críticos;
+7. executar geração ClimateChat nesses casos;
+8. realizar 192 avaliações atuais com Juiz LLM;
+9. produzir análise de causa-raiz, tabelas e figuras finais.
+
+---
+
+## 22. Registro experimental
+
+Decisões metodológicas, auditorias, divergências e resultados intermediários são registrados em:
 
 ```text
 docs/registro_experimental.md
@@ -538,45 +670,8 @@ docs/registro_experimental.md
 
 ---
 
-## 18. Status atual
-
-Concluído:
-
-- auditoria do corpus P0;
-- identificação dos 38 documentos canônicos;
-- separação correta dos Cross Chapters;
-- validação das 130 perguntas do SPAmazon-QA;
-- reprodução da baseline histórica;
-- definição das variantes P0–P4;
-- validação manual do pré-processamento;
-- testes automatizados;
-- congelamento das regras de pré-processamento;
-- geração e auditoria dos corpora derivados;
-- geração de hashes para reprodutibilidade.
-
-Em execução / próximo estágio:
-
-- construção controlada dos índices P0–P4;
-- execução das 650 consultas;
-- cálculo das métricas comparativas;
-- análise por tipo e dificuldade;
-- análise dos casos linguisticamente críticos;
-- geração das tabelas e figuras finais.
-
----
-
-## 19. Observação metodológica
-
-O capítulo de origem é utilizado como referência operacional para avaliar a localização da fonte documental.
-
-Entretanto, um chunk pertencente a outro capítulo pode conter evidência cientificamente relevante devido à redundância temática e à natureza interdisciplinar dos relatórios do Science Panel for the Amazon.
-
-Assim, as métricas de recuperação deste trabalho avaliam principalmente a **capacidade de relocalização do documento de origem**, e não constituem, isoladamente, uma medida de relevância semântica absoluta ou da qualidade de uma resposta final produzida por um sistema RAG.
-
----
-
 ## Autoria
 
 **Ana Clara Guerra**
 
-Projeto desenvolvido no contexto da disciplina de **Processamento de Linguagem Natural — INF 791**.
+Projeto desenvolvido no contexto da disciplina **INF 791 - Processamento de Linguagem Natural**.

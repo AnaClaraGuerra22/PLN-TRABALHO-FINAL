@@ -1,0 +1,61 @@
+{
+  "source": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\SPAmazon-QA.json",
+  "total_questions": 130,
+  "variants": {
+    "P0": {
+      "questions": 130,
+      "unique_ids": 130,
+      "empty_queries": 0,
+      "changed_queries": 0,
+      "original_characters": 14635,
+      "processed_characters": 14635,
+      "character_reduction_percent": 0.0,
+      "sha256": "39cff97c889abaa487a4d8937c30c180b39619b8080b5d506a9771750b1fed4c",
+      "output_file": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\data\\processed\\p0_questions.jsonl"
+    },
+    "P1": {
+      "questions": 130,
+      "unique_ids": 130,
+      "empty_queries": 0,
+      "changed_queries": 130,
+      "original_characters": 14635,
+      "processed_characters": 14635,
+      "character_reduction_percent": 0.0,
+      "sha256": "af3d568de1353f48408fcc29fead75f69e094100fb2702347128c4ef75931144",
+      "output_file": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\data\\processed\\p1_questions.jsonl"
+    },
+    "P2": {
+      "questions": 130,
+      "unique_ids": 130,
+      "empty_queries": 0,
+      "changed_queries": 130,
+      "original_characters": 14635,
+      "processed_characters": 11477,
+      "character_reduction_percent": 21.578407926204303,
+      "sha256": "31e54cda5451e7e26bb92c4a4d142125e002783647460c8c6b8519d15e341dac",
+      "output_file": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\data\\processed\\p2_questions.jsonl"
+    },
+    "P3": {
+      "questions": 130,
+      "unique_ids": 130,
+      "empty_queries": 0,
+      "changed_queries": 130,
+      "original_characters": 14635,
+      "processed_characters": 14169,
+      "character_reduction_percent": 3.184147591390507,
+      "sha256": "9156f4c3b975dd1e0dd93403a91aee9d5ba89c3699c12e924a487833c49d5bff",
+      "output_file": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\data\\processed\\p3_questions.jsonl"
+    },
+    "P4": {
+      "questions": 130,
+      "unique_ids": 130,
+      "empty_queries": 0,
+      "changed_queries": 130,
+      "original_characters": 14635,
+      "processed_characters": 12936,
+      "character_reduction_percent": 11.60915613255893,
+      "sha256": "1f10f191672c26028d558a12294f9264ef4bc368ec41ed5d2af3bbc24bd0f2ac",
+      "output_file": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\data\\processed\\p4_questions.jsonl"
+    }
+  }
+}

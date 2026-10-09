@@ -1,0 +1,69 @@
+{
+  "timestamp": "2026-10-08T20:38:42.186183",
+  "python": "3.13.3",
+  "chromadb": "1.5.5",
+  "langchain_huggingface": "1.2.1",
+  "sentence_transformers": "5.3.0",
+  "embedding_model": "sentence-transformers/all-mpnet-base-v2",
+  "embedding_dimension": 768,
+  "collection_name": "langchain",
+  "batch_size": 128,
+  "insertion_order": "identical P0-P4",
+  "databases": {
+    "P0": {
+      "variant": "P0",
+      "path": "C:\\PLN_EXPERIMENTOS\\VECTOR_DB_CONTROLLED\\P0",
+      "collection": "langchain",
+      "chunks": 6900,
+      "embedding_dimension": 768,
+      "batch_size": 128,
+      "corpus_file": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\data\\reference\\p0_chunks.jsonl",
+      "corpus_sha256": "1fce41571ca46ccca48c9aaf2fc07013aa7fe6bd215305350365eb451a73fae8",
+      "collection_metadata": null
+    },
+    "P1": {
+      "variant": "P1",
+      "path": "C:\\PLN_EXPERIMENTOS\\VECTOR_DB_CONTROLLED\\P1",
+      "collection": "langchain",
+      "chunks": 6900,
+      "embedding_dimension": 768,
+      "batch_size": 128,
+      "corpus_file": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\data\\processed\\p1_chunks.jsonl",
+      "corpus_sha256": "0e1efcd0f921f08956529d89eb0ff267d221fbf494458c655e5e7e6eff1c3c6a",
+      "collection_metadata": null
+    },
+    "P2": {
+      "variant": "P2",
+      "path": "C:\\PLN_EXPERIMENTOS\\VECTOR_DB_CONTROLLED\\P2",
+      "collection": "langchain",
+      "chunks": 6900,
+      "embedding_dimension": 768,
+      "batch_size": 128,
+      "corpus_file": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\data\\processed\\p2_chunks.jsonl",
+      "corpus_sha256": "48dc79cf004d56c5f25905532564fc8a0f4018f6c15fdbe241c2e6b2f8103447",
+      "collection_metadata": null
+    },
+    "P3": {
+      "variant": "P3",
+      "path": "C:\\PLN_EXPERIMENTOS\\VECTOR_DB_CONTROLLED\\P3",
+      "collection": "langchain",
+      "chunks": 6900,
+      "embedding_dimension": 768,
+      "batch_size": 128,
+      "corpus_file": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\data\\processed\\p3_chunks.jsonl",
+      "corpus_sha256": "ae8b5ad596327372a3b5b6cf8e92a422db99ac45daae7e8f288e86e325302e99",
+      "collection_metadata": null
+    },
+    "P4": {
+      "variant": "P4",
+      "path": "C:\\PLN_EXPERIMENTOS\\VECTOR_DB_CONTROLLED\\P4",
+      "collection": "langchain",
+      "chunks": 6900,
+      "embedding_dimension": 768,
+      "batch_size": 128,
+      "corpus_file": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\data\\processed\\p4_chunks.jsonl",
+      "corpus_sha256": "70fd5435015ba57aea468b8148190c1cc619e69796b8b33c6871cbb55ca62ded",
+      "collection_metadata": null
+    }
+  }
+}

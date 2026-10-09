@@ -1,0 +1,5 @@
+﻿variant,n,improved,worsened,same_rank,new_hit,lost_hit,unchanged_miss
+P1,130,0,0,124,0,0,6
+P2,130,5,22,88,1,9,5
+P3,130,6,13,103,0,2,6
+P4,130,6,26,79,0,13,6
