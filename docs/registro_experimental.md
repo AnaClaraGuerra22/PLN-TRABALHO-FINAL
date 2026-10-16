@@ -1025,3 +1025,438 @@ como execução piloto e não serão utilizadas na análise comparativa final.
 A resposta histórica do TCC permanece disponível como referência externa,
 enquanto a comparação experimental principal é realizada entre P0, P1,
 P2, P3 e P4 sob a mesma seed fixa.
+
+
+## 15. Geração downstream e auditoria das respostas P0–P4
+
+Após a conclusão da recuperação controlada e a validação do protocolo de
+determinismo, foi executada a etapa downstream do experimento.
+
+O objetivo desta etapa é investigar se alterações produzidas pelo
+pré-processamento na recuperação semântica podem se propagar para a resposta
+final do AmazoniaExpert.IA.
+
+A geração foi realizada somente para os 32 casos críticos previamente
+selecionados e congelados.
+
+Foram consideradas cinco condições:
+
+- P0 — recuperação utilizando o texto original;
+- P1 — lowercase;
+- P2 — lowercase + remoção controlada de stopwords;
+- P3 — lowercase + lematização;
+- P4 — lowercase + Porter stemming.
+
+Assim, foram previstas:
+
+`32 perguntas × 5 variantes = 160 respostas RAG`
+
+A execução foi concluída com:
+
+- 160 respostas geradas;
+- 32 questões distintas;
+- 32 respostas para cada variante;
+- nenhuma combinação questão-variante duplicada;
+- nenhuma resposta vazia;
+- `generation_seed = 42` em todas as respostas;
+- protocolo único `downstream-rag-fixed-seed-v2`.
+
+Os resultados brutos foram armazenados em:
+
+`results/raw/downstream_responses_rag.csv`
+
+e
+
+`results/raw/downstream_responses_rag.jsonl`
+
+A configuração completa da execução foi registrada em:
+
+`results/runs/downstream_generation_run.json`
+
+
+### 15.1 Arquitetura utilizada na geração
+
+Todas as 160 respostas foram produzidas pelo AmazoniaExpert.IA, isto é,
+pelo ClimateChat integrado ao pipeline RAG.
+
+Não foram produzidas respostas ClimateChat zero-shot nesta etapa.
+
+Também não foi realizada uma nova busca vetorial durante a geração.
+
+Os Top-5 de cada combinação questão-variante foram consumidos diretamente
+do ranking previamente congelado em:
+
+`results/cases/downstream_retrieval_top5.csv`
+
+O pipeline utilizado foi:
+
+`consulta processada Pk -> Top-5 congelado -> IDs dos chunks -> texto
+original P0 -> prompt RAG -> ClimateChat -> resposta`
+
+Dessa forma, o texto transformado por P1, P2, P3 ou P4 foi utilizado
+somente para determinar a recuperação.
+
+O ClimateChat nunca recebeu chunks em lowercase, sem stopwords,
+lematizados ou stemizados.
+
+Após a seleção dos cinco `chunk_id`, o conteúdo correspondente foi
+recuperado a partir do corpus P0 e fornecido ao gerador em sua forma
+textual original.
+
+A pergunta entregue ao ClimateChat também foi sempre a pergunta original
+do SPAmazon-QA, e não sua versão pré-processada.
+
+Essa decisão permite atribuir as diferenças entre as respostas ao contexto
+recuperado, mantendo constantes as demais entradas do gerador.
+
+
+### 15.2 Configuração do gerador
+
+Foi utilizado o modelo:
+
+`ClimateChat.i1-Q4_K_M.gguf`
+
+integrado ao AmazoniaExpert.IA.
+
+A configuração utilizada foi:
+
+- temperature = 0.1;
+- max_tokens = 2048;
+- n_ctx = 8192;
+- n_gpu_layers = 0;
+- repeat_penalty = 1.15;
+- top_p = 0.9;
+- top_k = 40;
+- seed = 42;
+- stop tokens = `</s>`, `Question:` e `[INST]`.
+
+A seed foi reinicializada em cada completion utilizando o protocolo:
+
+`reset -> set_seed(42) -> create_completion(seed=42)`
+
+Essa configuração foi adotada após um teste piloto demonstrar que manter a
+seed apenas no construtor do modelo não era suficiente para garantir respostas
+idênticas em chamadas sequenciais com prompts idênticos.
+
+
+### 15.3 Controle de determinismo
+
+Antes da execução completa foi utilizado o Caso 9 como teste de controle.
+
+P0 e P1 apresentavam:
+
+- os mesmos cinco `chunk_id`;
+- o mesmo contexto;
+- a mesma pergunta original;
+- o mesmo prompt completo.
+
+Com a reinicialização da seed em cada completion, P0 e P1 produziram
+respostas textualmente idênticas.
+
+O hash SHA-256 obtido para ambas foi:
+
+`824d4089da46a66e6590e832222b0d696f1e381bff38a74485477ff4f440bc02`
+
+O teste foi considerado aprovado antes da geração das 160 respostas.
+
+Durante a auditoria posterior do conjunto completo, foram identificados
+31 grupos nos quais duas ou mais variantes de uma mesma pergunta receberam
+exatamente o mesmo prompt.
+
+Em todos esses grupos, prompts idênticos produziram respostas idênticas.
+
+Esse resultado confirma que o controle de aleatoriedade permaneceu efetivo
+durante a execução completa e reduz o risco de atribuir à mudança de
+pré-processamento diferenças causadas apenas pela amostragem do modelo.
+
+
+### 15.4 Relação entre P0 e P1
+
+P0 e P1 apresentaram o mesmo prompt em 31 dos 32 casos críticos.
+
+Nesses 31 casos, as respostas também foram exatamente iguais.
+
+A única exceção foi a Questão 58.
+
+Na Q58, embora P0 e P1 já tivessem apresentado o mesmo desempenho nas
+métricas baseadas na posição do primeiro documento-alvo, o conteúdo completo
+do Top-5 não foi idêntico.
+
+Em P0, os capítulos do Top-5 foram:
+
+`4 | 4 | 4 | 28 | Annex I`
+
+Em P1:
+
+`4 | 4 | 4 | Annex I | 18`
+
+Portanto, o lowercase não alterou a posição do primeiro documento relevante
+nesse caso, mas modificou os fragmentos presentes nas posições inferiores do
+ranking.
+
+Essa observação é metodologicamente importante: igualdade em Hit@k ou no
+primeiro rank relevante não implica necessariamente identidade de todo o
+ranking recuperado.
+
+Apesar de P0 e P1 apresentarem métricas globais idênticas no experimento
+principal, pequenas alterações no conjunto de contexto ainda podem ocorrer.
+
+
+### 15.5 Caso 11 — falha temporal persistente
+
+O Caso 11 tem como capítulo-alvo o Chapter 17 e contém uma restrição
+temporal importante associada à expressão:
+
+`since the 1970s`
+
+Na geração downstream, os cinco chunks utilizados em P0 foram todos
+provenientes do Chapter 11:
+
+`P0 -> 11 | 11 | 11 | 11 | 11`
+
+P1 apresentou exatamente o mesmo contexto:
+
+`P1 -> 11 | 11 | 11 | 11 | 11`
+
+P2 também permaneceu inteiramente no Chapter 11:
+
+`P2 -> 11 | 11 | 11 | 11 | 11`
+
+P3 igualmente não corrigiu a recuperação:
+
+`P3 -> 11 | 11 | 11 | 11 | 11`
+
+P4 alterou substancialmente o contexto recuperado, porém todos os cinco
+chunks passaram a pertencer ao Chapter 18:
+
+`P4 -> 18 | 18 | 18 | 18 | 18`
+
+Assim, nenhuma das cinco variantes forneceu ao gerador um chunk do
+Chapter 17 dentro do Top-5.
+
+O caso mostra que as operações de pré-processamento foram capazes de
+alterar o tipo de erro de recuperação, especialmente em P4, mas não
+resolveram a falha relacionada ao capítulo-alvo.
+
+A avaliação pelo Juiz LLM será utilizada posteriormente para verificar
+se essa mudança de contexto, mesmo sem recuperar o documento-alvo, produz
+alguma alteração mensurável na qualidade da resposta.
+
+
+### 15.6 Caso 65 — entrada do documento-alvo no Top-5
+
+O Caso 65 tem como alvo o Cross Chapter 1.
+
+Em P0, os cinco chunks vieram do Chapter 6:
+
+`P0 -> 6 | 6 | 6 | 6 | 6`
+
+P1 apresentou o mesmo contexto:
+
+`P1 -> 6 | 6 | 6 | 6 | 6`
+
+P2 também permaneceu restrito ao Chapter 6:
+
+`P2 -> 6 | 6 | 6 | 6 | 6`
+
+Em P3 ocorreu uma mudança relevante:
+
+`P3 -> 6 | 6 | Cross Chapter 1 | 6 | 6`
+
+Assim, o documento-alvo passou a integrar o contexto do gerador na terceira
+posição.
+
+Em P4:
+
+`P4 -> 6 | Cross Chapter 1 | 4 | 6 | 6`
+
+o documento-alvo passou para a segunda posição.
+
+Devido ao problema histórico de metadados identificado anteriormente,
+o campo `chapter_number` registra Cross Chapter 1 como `1`.
+
+Por esse motivo, a identificação deste caso deve ser feita utilizando
+preferencialmente o campo `source`, que confirma que os fragmentos das
+posições indicadas pertencem ao arquivo:
+
+`Part_I_Cap_01_Cross Chapter 1 The Amazon Carbon Budget.pdf`
+
+Esse caso constitui um exemplo particularmente importante para a etapa
+seguinte, pois P3 e P4 transformaram uma falha em Hit@5 em uma recuperação
+que efetivamente fornece ao ClimateChat conteúdo do documento-alvo.
+
+A avaliação downstream permitirá testar se essa melhora da recuperação
+também produz uma melhora na qualidade da resposta final.
+
+
+### 15.7 Caso 83 — aumento progressivo da presença do capítulo-alvo
+
+O Caso 83 tem como alvo o Chapter 27.
+
+Em P0:
+
+`16 | 28 | 16 | 28 | 19`
+
+nenhum fragmento do Chapter 27 foi enviado ao gerador.
+
+P1 reproduziu o mesmo contexto.
+
+P2 apresentou:
+
+`16 | 16 | 16 | 16 | 16`
+
+também sem qualquer fragmento do capítulo-alvo.
+
+P3 modificou significativamente o contexto:
+
+`16 | 19 | 27 | 27 | 28`
+
+passando a incluir dois fragmentos do Chapter 27 nas posições 3 e 4.
+
+P4 apresentou:
+
+`28 | 27 | 27 | 27 | 27`
+
+com quatro dos cinco fragmentos provenientes do capítulo-alvo.
+
+Esse caso fornece um contraste particularmente útil para a análise
+downstream.
+
+Há uma progressão clara na presença de evidência proveniente do documento
+correto:
+
+- P0/P1: 0 de 5 chunks do alvo;
+- P2: 0 de 5;
+- P3: 2 de 5;
+- P4: 4 de 5.
+
+A etapa de julgamento permitirá verificar se o aumento da presença do
+documento-alvo no contexto também se reflete em notas mais altas de
+qualidade da resposta.
+
+
+### 15.8 Caso 124 — ganho específico produzido por P2
+
+O Caso 124 tem como alvo o Chapter 15.
+
+P0 recuperou:
+
+`19 | 19 | 19 | 19 | 19`
+
+P1 apresentou o mesmo conjunto.
+
+P3 também permaneceu restrito ao Chapter 19:
+
+`19 | 19 | 19 | 19 | 19`
+
+P4 apresentou:
+
+`19 | 19 | 19 | 19 | 14`
+
+sem inclusão do capítulo-alvo.
+
+P2 foi a única variante que introduziu o Chapter 15 no contexto:
+
+`19 | 19 | 15 | 19 | 17`
+
+O documento-alvo aparece na terceira posição.
+
+Esse resultado é particularmente relevante porque P2 apresentou pior
+desempenho global que P0, mas corrigiu esta consulta específica.
+
+O Caso 124 demonstra que uma transformação globalmente desfavorável pode
+produzir ganhos localizados.
+
+A análise pelo Juiz LLM permitirá investigar se esse ganho de recuperação
+se traduz também em uma resposta de maior qualidade.
+
+
+### 15.9 Caso 117 — convergência entre P0, P1 e P3
+
+Na Questão 117, P0, P1 e P3 produziram exatamente o mesmo conjunto
+ordenado de chunks.
+
+Os três contextos foram compostos por cinco fragmentos do Chapter 11.
+
+Consequentemente, os prompts enviados ao ClimateChat foram idênticos.
+
+Sob o protocolo determinístico adotado, P0, P1 e P3 produziram também
+exatamente a mesma resposta.
+
+Esse caso funciona como um controle interno adicional do experimento:
+quando a transformação linguística não altera efetivamente o conjunto e
+a ordem dos documentos entregues ao gerador, a resposta downstream também
+permanece inalterada.
+
+
+### 15.10 Interpretação prévia da geração downstream
+
+A etapa atual ainda não permite afirmar que uma variante produz respostas
+melhores ou piores.
+
+Até este ponto, a análise demonstra apenas que:
+
+1. o pipeline downstream foi executado de forma controlada;
+2. prompts idênticos produzem respostas idênticas;
+3. alterações no pré-processamento podem modificar os documentos que
+   compõem o Top-5;
+4. essas mudanças alteram o contexto recebido pelo AmazoniaExpert.IA;
+5. existem casos em que o documento-alvo entra ou sai da janela de
+   contexto conforme a variante utilizada.
+
+Os Casos 65, 83 e 124 são exemplos particularmente úteis de situações em
+que uma variante introduz o documento-alvo no Top-5.
+
+O Caso 11 representa uma situação complementar, na qual nenhuma variante
+recupera o documento-alvo, embora P4 produza uma mudança substancial no
+tipo de conteúdo fornecido ao gerador.
+
+Esses resultados justificam a etapa seguinte do experimento: avaliar cada
+resposta individualmente por meio do mesmo paradigma de Juiz LLM utilizado
+no TCC.
+
+A qualidade das respostas ainda não será inferida apenas a partir da
+presença do capítulo-alvo.
+
+Uma recuperação aparentemente melhor pode não necessariamente produzir
+uma resposta melhor, e uma recuperação sem o capítulo-alvo pode ainda
+conter fragmentos semanticamente suficientes para responder à pergunta.
+
+Portanto, somente após o julgamento será possível analisar a cadeia:
+
+`pré-processamento -> recuperação -> contexto RAG -> qualidade da resposta`
+
+
+### 15.11 Próxima etapa
+
+A próxima etapa consiste na avaliação das respostas geradas.
+
+Serão submetidas ao Juiz LLM:
+
+- 160 respostas controladas correspondentes a P0–P4;
+- 32 respostas históricas do AmazoniaExpert.IA utilizadas no TCC.
+
+Total previsto:
+
+`192 avaliações`
+
+Cada avaliação produzirá:
+
+- nota Likert inteira de 1 a 5;
+- justificativa técnica textual.
+
+A escala Likert será mantida igual à utilizada no TCC, sem introdução de
+valores intermediários, para preservar a comparabilidade metodológica.
+
+As 32 respostas históricas serão reavaliadas pelo juiz atual e mantidas
+separadas de suas notas históricas. Essa comparação será utilizada para
+verificar possível variação do comportamento do Juiz LLM ao longo do tempo.
+
+As novas notas P0–P4 serão então relacionadas aos resultados de recuperação,
+permitindo investigar situações como:
+
+- recuperação melhora e resposta melhora;
+- recuperação melhora e resposta permanece equivalente;
+- recuperação piora e resposta piora;
+- recuperação muda sem alterar a avaliação final;
+- capítulo-alvo permanece ausente, mas a resposta muda qualitativamente.
