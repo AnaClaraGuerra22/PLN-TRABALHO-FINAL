@@ -1000,3 +1000,28 @@ Resultados:
 - nenhuma nova recuperação vetorial executada.
 
 A validação foi concluída sem erros antes do início da geração.
+
+
+### 14.4 Controle de aleatoriedade da geração
+
+Durante uma execução piloto da análise downstream, observou-se que
+prompts idênticos podiam produzir respostas distintas devido à amostragem
+do modelo gerador.
+
+Como o objetivo desta etapa é isolar o efeito da alteração do contexto
+recuperado, foi fixada `seed=42` nas novas gerações controladas.
+
+Foram mantidos os demais parâmetros da bateria experimental original:
+
+- temperature = 0.1;
+- top_p = 0.9;
+- repeat_penalty = 1.15;
+- max_tokens = 2048;
+- n_ctx = 8192.
+
+As respostas produzidas antes da fixação da seed foram preservadas apenas
+como execução piloto e não serão utilizadas na análise comparativa final.
+
+A resposta histórica do TCC permanece disponível como referência externa,
+enquanto a comparação experimental principal é realizada entre P0, P1,
+P2, P3 e P4 sob a mesma seed fixa.

@@ -1,0 +1,56 @@
+{
+  "timestamp": "2026-10-16T00:26:30.274732",
+  "protocol_version": "downstream-rag-fixed-seed-v2",
+  "python": "3.13.3",
+  "llama_cpp_python": "0.3.19",
+  "langchain_community": "0.4.1",
+  "model_path": "C:\\TCCII\\MODELO\\ClimateChat.i1-Q4_K_M.gguf",
+  "model_filename": "ClimateChat.i1-Q4_K_M.gguf",
+  "generator": "ClimateChat.i1-Q4_K_M.gguf",
+  "architecture": "AmazoniaExpert.IA RAG",
+  "zero_shot_generated": false,
+  "new_vector_search_performed": false,
+  "retrieval_source": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\cases\\downstream_retrieval_top5.csv",
+  "retrieval_sha256": "8693424ae92b688c9d27f5e5d476c2d423a3c9a9a5cd97d7fb23e785a81cd8ac",
+  "p0_corpus_sha256": "1fce41571ca46ccca48c9aaf2fc07013aa7fe6bd215305350365eb451a73fae8",
+  "critical_cases_sha256": "ea950e45e21654bdc8313a53bb50add8929de093279671e8f1c3a6c1d451225a",
+  "n_cases": 32,
+  "variants": [
+    "P0",
+    "P1",
+    "P2",
+    "P3",
+    "P4"
+  ],
+  "n_responses": 160,
+  "top_k_generation": 5,
+  "temperature": 0.1,
+  "max_tokens": 2048,
+  "n_ctx": 8192,
+  "n_gpu_layers": 0,
+  "repeat_penalty": 1.15,
+  "top_p": 0.9,
+  "top_k": 40,
+  "seed": 42,
+  "seed_application": "reset/set_seed/create_completion(seed=42) for every generation",
+  "stop": [
+    "</s>",
+    "Question:",
+    "[INST]"
+  ],
+  "question_to_generator": "original",
+  "context_text": "original P0 chunk text",
+  "prompt_template": "<s>[INST] You are a highly qualified scientific assistant specializing in the sustainable development of the Amazon. \nYour task is to answer the question primarily based on the provided context from the Science Panel for the Amazon (SPA) reports. \n\nStrict Rules you MUST follow:\n1. Direct Answer: Answer exactly what is asked. You may use your internal scientific expertise to complement the information, but do not contradict the context.\n2. Conciseness: Keep your answer between 1 to 3 short paragraphs. \n3. No Filler Words: DO NOT use conversational fillers like \"Based on the provided text...\", \"According to the context...\", or \"In conclusion...\". State the facts directly.\n\nContext extracted from SPA reports:\n{context}\n\nQuestion: {question}\nScientific Answer: [/INST]",
+  "determinism_test": {
+    "qid": 9,
+    "variants": [
+      "P0",
+      "P1"
+    ],
+    "prompt_sha256": "fc020e0869c7b9f650dba9bd76acc5f1d6f07021a46188245e2d8f2c2a0d514b",
+    "response_sha256": "824d4089da46a66e6590e832222b0d696f1e381bff38a74485477ff4f440bc02",
+    "identical": true
+  },
+  "output_csv": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\raw\\downstream_responses_rag.csv",
+  "output_jsonl": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\raw\\downstream_responses_rag.jsonl"
+}
