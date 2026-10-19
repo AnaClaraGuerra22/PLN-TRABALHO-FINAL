@@ -1,0 +1,4 @@
+﻿analysis_type,group,n,mean_judge_score,median_judge_score,std_judge_score,spearman_rho,spearman_p
+hit5_group,target_absent_top5,45,2.1777777777777776,2.0,1.0065442430073868,,
+hit5_group,target_present_top5,115,2.208695652173913,2.0,0.8324098620809958,,
+spearman_rr10_vs_judge,all_160_controlled,160,2.2,2.0,0.8816793581376609,0.09083542206589729,0.2533120129134211

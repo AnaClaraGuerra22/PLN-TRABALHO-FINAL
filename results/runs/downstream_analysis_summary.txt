@@ -1,0 +1,45 @@
+ANÁLISE DOWNSTREAM — RESUMO REPRODUZÍVEL
+============================================================
+
+1) Sensibilidade à substituição do Juiz LLM
+- Média histórica (32 respostas): 3.125
+- Média atual nas mesmas respostas: 1.969
+- Delta médio atual-histórico: -1.156
+- Atual menor: 29/32 (90.6%)
+- Wilcoxon p = 6.5989679e-07
+
+2) Notas P0-P4 nos 32 casos críticos
+- P0: média=2.188, mediana=2.0, DP=0.896
+- P1: média=2.156, mediana=2.0, DP=0.884
+- P2: média=2.250, mediana=2.0, DP=0.984
+- P3: média=2.000, mediana=2.0, DP=0.622
+- P4: média=2.406, mediana=2.0, DP=0.979
+- Friedman: estatística=4.8500, p=0.303038
+
+3) Comparações Pk vs P0
+- P1: melhorou=0, igual=31, piorou=1, delta médio=-0.031, p bruto=0.317311, p Holm=0.895243
+- P2: melhorou=6, igual=19, piorou=7, delta médio=+0.062, p bruto=0.743584, p Holm=0.895243
+- P3: melhorou=5, igual=18, piorou=9, delta médio=-0.188, p bruto=0.237175, p Holm=0.895243
+- P4: melhorou=10, igual=15, piorou=7, delta médio=+0.219, p bruto=0.223811, p Holm=0.895243
+
+4) Retrieval × nota
+- Alvo ausente no Top-5: n=45, média=2.178
+- Alvo presente no Top-5: n=115, média=2.209
+- Spearman RR@10 × nota: rho=0.0908, p=0.253312
+- Entrada do alvo no Top-5: n=5, melhorou=2, igual=2, piorou=1
+- Saída do alvo do Top-5: n=5, melhorou=0, igual=2, piorou=3
+
+5) Correlação exploratória das mudanças
+- all_P1_to_P4_vs_P0: rho=0.1762, p=0.046697 (exploratório)
+- P1_vs_P0: correlação não definida (uma das variáveis é constante).
+- P2_vs_P0: rho=0.1826, p=0.317122 (exploratório)
+- P3_vs_P0: rho=-0.0036, p=0.984477 (exploratório)
+- P4_vs_P0: rho=0.4200, p=0.016690 (exploratório)
+
+Interpretação:
+- As notas atuais não substituem a média histórica global do TCC.
+- O juiz atual foi sistematicamente mais severo nas mesmas 32 respostas históricas.
+- As comparações downstream principais devem ser internas e pareadas entre P0-P4.
+- Não houve diferença global significativa entre P0-P4 nos 32 casos críticos.
+- Mudanças no retrieval não se propagaram de forma determinística para a qualidade da resposta.
+- Os 32 casos são uma amostra crítica pré-selecionada, não uma estimativa global das 130 perguntas.

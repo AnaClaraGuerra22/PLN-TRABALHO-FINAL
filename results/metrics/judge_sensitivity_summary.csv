@@ -1,0 +1,2 @@
+﻿n,historical_mean,historical_median,historical_std,current_mean,current_median,current_std,mean_delta_current_minus_historical,median_delta_current_minus_historical,current_higher,same,current_lower,current_lower_percent,delta_minus_3_count,delta_minus_2_count,delta_minus_1_count,delta_0_count,delta_plus_1_count,delta_plus_2_count,delta_plus_3_count,wilcoxon_statistic,wilcoxon_p,significant_0_05
+32,3.125,3.0,0.7931155389125321,1.96875,2.0,0.6948833738303187,-1.15625,-1.0,0,3,29,90.625,1,6,22,3,0,0,0,0.0,6.59896793681569e-07,True

@@ -1,0 +1,5 @@
+﻿hit5_transition,n,judge_improved,judge_same,judge_worsened,mean_delta_judge,median_delta_judge,mean_delta_rr10
+entered_top5,5,2,2,1,0.2,0.0,0.2666666666666667
+left_top5,5,0,2,3,-0.6,-1.0,-0.8666666666666668
+stayed_hit,87,13,61,13,0.04597701149425287,0.0,-0.05363984674329502
+stayed_miss,31,6,18,7,0.0,0.0,-0.020993343573988726

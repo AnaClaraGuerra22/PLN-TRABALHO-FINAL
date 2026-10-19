@@ -1,0 +1,2 @@
+﻿analysis,test,statistic,p_value,alpha,significant_0_05,interpretation
+P0-P4 paired downstream scores,Friedman,4.850000000000136,0.30303755771913427,0.05,False,No global evidence of score differences across P0-P4

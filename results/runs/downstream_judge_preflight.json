@@ -1,0 +1,50 @@
+{
+  "timestamp": "2026-10-16T10:19:49.528651",
+  "judge_protocol_version": "judge-tcc-prompt-gptoss120b-dedup-v3",
+  "judge_prompt_source": "C:\\TCCII\\JUIZ\\juiz_climatechatrag.py",
+  "judge_prompt_fidelity": "literal reproduction supplied by author",
+  "legacy_judge_model": "llama-3.3-70b-versatile",
+  "judge_model": "openai/gpt-oss-120b",
+  "judge_model_change_reason": "Historical Groq judge unavailable to current account; official replacement used.",
+  "judge_temperature": 0.0,
+  "judge_reasoning_effort": "medium",
+  "groq_url": "https://api.groq.com/openai/v1/chat/completions",
+  "message_roles": [
+    "user"
+  ],
+  "response_format": {
+    "type": "json_object"
+  },
+  "source_generation_protocol": "downstream-rag-fixed-seed-v2",
+  "source_generation_seed": 42,
+  "input_csv": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\raw\\downstream_responses_rag.csv",
+  "input_csv_sha256": "def76855d68fd599f23cad9f9cadc0c7f7d3bbf5f221a57497c3e7f4deb9ff66",
+  "input_jsonl": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\raw\\downstream_responses_rag.jsonl",
+  "input_jsonl_sha256": "174bb8e4d0b1033c4c2c459524fc39ee441cda7030f7a518d57772f448bf71d1",
+  "generation_run_file": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\runs\\downstream_generation_run.json",
+  "generation_run_sha256": "c76e98082d1a5326e0adbced131e253a1caed2750c290d72cb223dafa600b0d3",
+  "generator_model_path": "C:\\TCCII\\MODELO\\ClimateChat.i1-Q4_K_M.gguf",
+  "generator_model_sha256": "ebc1031587b4688902dcdc375f62d9be1d6796d2754a7145b34e8d7ee6a8a2af",
+  "n_controlled": 160,
+  "n_historical": 32,
+  "n_evaluation_rows": 192,
+  "n_unique_judge_inputs": 154,
+  "likert_scale": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "deduplication_rule": "Identical question + gabarito + answer => one current judge call; verdict propagated to equivalent rows.",
+  "blind_fields_not_sent_to_judge": [
+    "evaluation_scope",
+    "variant",
+    "nota_historica",
+    "generation_seed",
+    "generation_protocol",
+    "retrieval metadata"
+  ],
+  "prompt_template": "Você é um Professor Doutor especialista na Amazônia. \nAvalie a resposta de IA comparando com o Gabarito.\n\nEscala Likert 1-5:\n1 [Incorreta]: Errada ou irrelevante.\n2 [Macia]: Omitiu pontos centrais.\n3 [Parcial]: Incompleta ou rasa.\n4 [Boa]: Correta com falhas mínimas.\n5 [Excelente]: Perfeita e científica.\n\nPERGUNTA: {pergunta}\nGABARITO: {gabarito}\nRESPOSTA DA IA: {resposta_ia}\n\nIMPORTANTE: Responda APENAS no formato JSON exatamente como o exemplo:\n{{\"nota\": 5, \"justificativa\": \"A resposta cobre todos os pontos do gabarito.\"}}\n",
+  "prompt_template_sha256": "7513ede243e8f7941e3d7372b826f0bd7410ad310d8e7706b3e2f7c7aac87309"
+}

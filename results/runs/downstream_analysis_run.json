@@ -1,0 +1,138 @@
+{
+  "timestamp": "2026-10-19T20:29:26.087589",
+  "analysis_protocol": "downstream-analysis-v1",
+  "python": "3.13.3",
+  "pandas": "3.0.2",
+  "numpy": "2.4.4",
+  "scipy": "1.17.1",
+  "matplotlib": "3.10.8",
+  "alpha": 0.05,
+  "variants": [
+    "P0",
+    "P1",
+    "P2",
+    "P3",
+    "P4"
+  ],
+  "key_cases": [
+    11,
+    65,
+    83,
+    124
+  ],
+  "inputs_sha256": {
+    "downstream_judge_evaluations_csv": "fff3d19e4a702b6b03efcd743457bc626f75019d1a767da89b4b63533d6d5fa6",
+    "controlled_question_metrics_csv": "1bb5dd1107f2a254693b9157e978eef8551144e33f975cc1c1348004dc7166e0",
+    "downstream_retrieval_top5_csv": "8693424ae92b688c9d27f5e5d476c2d423a3c9a9a5cd97d7fb23e785a81cd8ac",
+    "downstream_judge_run_json": "d1289724e2810000698547a2a4b936e1b4b81451c885f3fe4906cfca5e8ae14f"
+  },
+  "validation": {
+    "final_evaluation_rows": 192,
+    "controlled_rows": 160,
+    "historical_rows": 32,
+    "unique_judge_inputs": 154
+  },
+  "headline_results": {
+    "historical_mean_old_judge": 3.125,
+    "historical_mean_current_judge": 1.96875,
+    "judge_sensitivity_wilcoxon_p": 6.59896793681569e-07,
+    "friedman_p": 0.30303755771913427,
+    "variant_means": {
+      "P0": 2.1875,
+      "P1": 2.15625,
+      "P2": 2.25,
+      "P3": 2.0,
+      "P4": 2.40625
+    },
+    "pairwise_holm_p": {
+      "P1": 0.8952428054387815,
+      "P2": 0.8952428054387815,
+      "P3": 0.8952428054387815,
+      "P4": 0.8952428054387815
+    },
+    "rr10_judge_spearman_rho": 0.09083542206589729,
+    "rr10_judge_spearman_p": 0.2533120129134211
+  },
+  "outputs": {
+    "downstream_summary_csv": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\metrics\\downstream_summary.csv",
+      "sha256": "7b0e91693f9f4156da12e17f12414c52b242b11d3b6b34ce2d83d1ce374c67b4"
+    },
+    "downstream_score_distribution_csv": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\tables\\downstream_score_distribution.csv",
+      "sha256": "fdbe598ccf37d2c2e3d6debdc931f48117a74180631a0ecc42addad09e047249"
+    },
+    "downstream_pairwise_vs_p0_csv": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\metrics\\downstream_pairwise_vs_p0.csv",
+      "sha256": "1d65320be720a6972cfe4dfca328e4ac2e16b449cfc0585a828eb2e94e34ce78"
+    },
+    "downstream_global_tests_csv": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\metrics\\downstream_global_tests.csv",
+      "sha256": "760d1b5253d5aaf83fb444aa758deaaba5fba900c6cc56b1503abae3457c707e"
+    },
+    "judge_sensitivity_summary_csv": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\metrics\\judge_sensitivity_summary.csv",
+      "sha256": "878218e86271a5cb9845d337b5acabf9b5c679d3b97ac6af03ffff3486036af6"
+    },
+    "judge_sensitivity_per_question_csv": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\metrics\\judge_sensitivity_per_question.csv",
+      "sha256": "d9ba65a32888689c1ca159e5241e509881fb58b7af033d028745fd292ed231bb"
+    },
+    "retrieval_answer_relationship_csv": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\metrics\\retrieval_answer_relationship.csv",
+      "sha256": "c38489a09fc17cdf4fb9c2a89172f2850c76ada21e05a0028a0e4e67d90bb83e"
+    },
+    "retrieval_change_answer_change_csv": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\metrics\\retrieval_change_answer_change.csv",
+      "sha256": "6a4b709afe47522ae97c0cb8edcc13f51d87f5625a70fe8554cdcce5e943ec5a"
+    },
+    "retrieval_change_per_question_csv": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\metrics\\retrieval_change_answer_change_per_question.csv",
+      "sha256": "6ebd9cbfedc631f00df1eff313b9010ff1287fbece829dd1d6a9827848eeff18"
+    },
+    "retrieval_delta_answer_delta_correlations_csv": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\metrics\\retrieval_delta_answer_delta_correlations.csv",
+      "sha256": "92f7797dbcca04581f134acad0d733cba23ba0d553b3236c69cbda8b1b29a15b"
+    },
+    "downstream_key_cases_csv": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\tables\\downstream_key_cases.csv",
+      "sha256": "dbacb204745e73072e95a471f42757992ac7d8180c5a0240e007d029d3e3183c"
+    },
+    "downstream_analysis_summary_txt": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\runs\\downstream_analysis_summary.txt",
+      "sha256": "2f58430db54f994bdcb98683c7c274ffdb55f0b0848bc7830edc136278b3db36"
+    },
+    "likert_distribution_png": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\figures\\downstream_likert_distribution.png",
+      "sha256": "1fe2cfe5a0c261e7c0e6fe74d4b975f3c640d85d9f2685c781ae1f4e37a1c40a"
+    },
+    "likert_distribution_pdf": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\figures\\downstream_likert_distribution.pdf",
+      "sha256": "6382d1975a06fa8edefcaaa00b7269f128c44770a364cc2a50656e485ed60968"
+    },
+    "delta_vs_p0_png": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\figures\\downstream_delta_vs_p0.png",
+      "sha256": "bc9c9a5ab0b8d8730812af5e826efff980d89a3fac8f46cbf67d0a1dc4f4cce7"
+    },
+    "delta_vs_p0_pdf": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\figures\\downstream_delta_vs_p0.pdf",
+      "sha256": "0a9846d714219663a04cbea725b2d45b8814a710b6555e6349a584db70458cac"
+    },
+    "judge_sensitivity_matrix_png": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\figures\\judge_sensitivity_matrix.png",
+      "sha256": "8ce870fab4e06454300eb862f18cff087c5020dcecb9fd9e4905f82fd5f32f87"
+    },
+    "judge_sensitivity_matrix_pdf": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\figures\\judge_sensitivity_matrix.pdf",
+      "sha256": "4d9b1ba28ef5e81c3722e26c3aa22b02def4d1f1a659153fd5284c0dc8b25d29"
+    },
+    "retrieval_hit5_vs_judge_png": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\figures\\retrieval_hit5_vs_judge.png",
+      "sha256": "891514c68781360ffdc73723675af775db6a64730d3c2b1a7f6a9cb465f98c3a"
+    },
+    "retrieval_hit5_vs_judge_pdf": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\figures\\retrieval_hit5_vs_judge.pdf",
+      "sha256": "641b7d3fa78f780b0b68291b55d47a7467c79ec98c0ff832bd79af50ff64d931"
+    }
+  }
+}

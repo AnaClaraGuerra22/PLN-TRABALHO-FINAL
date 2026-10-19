@@ -1,0 +1,56 @@
+{
+  "timestamp": "2026-10-16T10:39:29.393744",
+  "judge_protocol_version": "judge-tcc-prompt-gptoss120b-dedup-v3",
+  "judge_prompt_source": "C:\\TCCII\\JUIZ\\juiz_climatechatrag.py",
+  "judge_prompt_fidelity": "literal reproduction supplied by author",
+  "python": "3.13.3",
+  "requests": "2.33.1",
+  "python_dotenv": "1.2.2",
+  "legacy_judge_model": "llama-3.3-70b-versatile",
+  "judge_model": "openai/gpt-oss-120b",
+  "judge_model_change_reason": "Historical Groq judge unavailable to current account; official replacement used.",
+  "reasoning_effort": "medium",
+  "temperature": 0.0,
+  "message_roles": [
+    "user"
+  ],
+  "response_format": {
+    "type": "json_object"
+  },
+  "likert_scale": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "n_final_evaluation_rows": 192,
+  "n_controlled_rows": 160,
+  "n_historical_rows": 32,
+  "n_unique_judge_inputs": 154,
+  "n_reused_verdict_rows": 38,
+  "blind_evaluation": true,
+  "fields_sent_to_judge": [
+    "pergunta",
+    "gabarito",
+    "resposta_avaliada"
+  ],
+  "fields_not_sent_to_judge": [
+    "variant",
+    "evaluation_scope",
+    "nota_historica",
+    "retrieval metadata",
+    "generation metadata"
+  ],
+  "deduplication_rule": "Identical question + gabarito + answer share one current judge verdict.",
+  "source_input_csv": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\raw\\downstream_responses_rag.csv",
+  "source_input_csv_sha256": "def76855d68fd599f23cad9f9cadc0c7f7d3bbf5f221a57497c3e7f4deb9ff66",
+  "source_generation_run": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\runs\\downstream_generation_run.json",
+  "source_generation_run_sha256": "c76e98082d1a5326e0adbced131e253a1caed2750c290d72cb223dafa600b0d3",
+  "output_csv": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\raw\\downstream_judge_evaluations.csv",
+  "output_csv_sha256": "fff3d19e4a702b6b03efcd743457bc626f75019d1a767da89b4b63533d6d5fa6",
+  "output_jsonl": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\raw\\downstream_judge_evaluations.jsonl",
+  "output_jsonl_sha256": "00a342b34cee5943d36a10c2f2a043ec022436d1bbb9203e043a2c5098841dcb",
+  "api_calls_this_execution": 154,
+  "reused_rows_this_execution": 38
+}
