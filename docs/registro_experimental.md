@@ -6,8 +6,8 @@
 **Base:** AmazoniaExpert.IA / SPAmazon-QA  
 
 **Início dos experimentos:** 08/10/2026  
-**Última atualização:** 19/10/2026  
-**Status atual:** etapa experimental principal concluída; resultados consolidados e prontos para redação do artigo final.
+**Última atualização:** 20/10/2026  
+**Status atual:** experimento principal, análise downstream e extensão mecanística RQ3 concluídos; etapa experimental encerrada e resultados consolidados para redação do artigo.
 
 
 ---
@@ -3595,16 +3595,6 @@ artefatos principais:
 - `results/tables/downstream_score_distribution.csv`
 - `results/tables/downstream_key_cases.csv`
 
-**Figuras**
-
-- `results/figures/downstream_likert_distribution.pdf`
-- `results/figures/downstream_delta_vs_p0.pdf`
-- `results/figures/judge_sensitivity_matrix.pdf`
-- `results/figures/retrieval_hit5_vs_judge.pdf`
-
-As versões PNG correspondentes também foram preservadas para uso no artigo e
-na apresentação.
-
 **Auditoria**
 
 - `results/runs/downstream_analysis_summary.txt`
@@ -3612,6 +3602,63 @@ na apresentação.
 
 O arquivo `downstream_analysis_run.json` registra as versões das bibliotecas,
 os hashes dos arquivos de entrada e saída e os principais resultados calculados.
+
+
+### 16.22 Geração e padronização das figuras finais
+
+Após o fechamento das análises quantitativas, as figuras destinadas ao
+repositório, ao artigo e à apresentação foram regeneradas por meio do script:
+
+`scripts/generate_final_figures.py`
+
+Foi adotada uma identidade visual única, baseada exclusivamente em tons de
+azul e cinza, com:
+
+- fundo branco;
+- tipografia consistente;
+- grades discretas;
+- títulos e eixos padronizados;
+- arquivos PNG em alta resolução;
+- arquivos PDF vetoriais.
+
+Para evitar conflitos de escrita observados durante o salvamento direto em
+arquivos sincronizados pelo OneDrive, o script final salva cada figura
+primeiro em arquivo temporário local e posteriormente copia o artefato pronto
+para o diretório final.
+
+Os artefatos visuais oficiais encontram-se em:
+
+`results/figures_final/`
+
+e são:
+
+- `fig01_downstream_likert.png`
+- `fig01_downstream_likert.pdf`
+- `fig02_downstream_delta.png`
+- `fig02_downstream_delta.pdf`
+- `fig03_judge_sensitivity.png`
+- `fig03_judge_sensitivity.pdf`
+- `fig04_hit5_vs_score.png`
+- `fig04_hit5_vs_score.pdf`
+- `fig05_retrieval_global.png`
+- `fig05_retrieval_global.pdf`
+
+O conteúdo das figuras é:
+
+1. `fig01_downstream_likert` — distribuição percentual das notas 1–5 em P0–P4;
+2. `fig02_downstream_delta` — número de casos que melhoraram, permaneceram iguais ou pioraram em relação a P0;
+3. `fig03_judge_sensitivity` — matriz de sensibilidade entre a nota histórica do TCC e a nota do juiz atual;
+4. `fig04_hit5_vs_score` — nota média downstream quando o capítulo-alvo está ausente ou presente no Top-5;
+5. `fig05_retrieval_global` — Hit@1, Hit@3, Hit@5 e Hit@10 nas cinco variantes.
+
+Para o artigo científico final, foram selecionadas como figuras principais:
+
+- `fig05_retrieval_global`;
+- `fig02_downstream_delta`;
+- `fig04_hit5_vs_score`.
+
+As figuras `fig01_downstream_likert` e `fig03_judge_sensitivity` permanecem
+disponíveis como material complementar e para possível uso na apresentação.
 
 
 ---
@@ -3674,5 +3721,677 @@ com outro Juiz LLM apenas para modificar as médias observadas. Qualquer anális
 adicional deverá ser claramente identificada como estudo de robustez separado,
 sem substituir os resultados já congelados.
 
-A partir deste ponto, o trabalho entra na fase de **consolidação do repositório,
-seleção de tabelas e figuras e redação do artigo científico final**.
+A partir deste ponto, os resultados principais permaneceram congelados. A extensão mecanística exploratória pós-resultados, descrita na Seção 18, foi posteriormente executada sem modificar variantes, índices, rankings, respostas RAG ou resultados principais. Com sua conclusão, a etapa experimental completa do trabalho é considerada encerrada.
+
+---
+
+# 18. Extensão mecanística exploratória pós-resultados
+
+## 18.1 Motivação e natureza da extensão
+
+Após o encerramento do experimento principal P0–P4 e da análise downstream,
+foi definida uma extensão adicional com finalidade **mecanística e exploratória**.
+
+Essa análise foi motivada pelos resultados já observados no experimento principal,
+em especial pelo contraste entre:
+
+- neutralidade de P1;
+- degradação de P2;
+- impacto relativamente pequeno de P3;
+- degradação mais intensa de P4.
+
+Por ter sido planejada **após a observação dos resultados principais**, esta frente
+não será apresentada como hipótese pré-registrada nem como confirmação causal
+das explicações levantadas anteriormente.
+
+Seu objetivo é investigar uma etapa intermediária ainda não observada diretamente:
+
+`pré-processamento -> tokenização -> embedding -> ranking`
+
+A extensão não altera:
+
+- as variantes P0–P4;
+- os corpora já congelados;
+- as 130 perguntas;
+- o encoder;
+- os índices vetoriais;
+- os rankings já produzidos;
+- as respostas RAG;
+- o Juiz LLM;
+- os resultados estatísticos principais.
+
+Nenhuma nova resposta será gerada e nenhum índice será reconstruído.
+
+
+## 18.2 Nova questão de pesquisa exploratória
+
+Foi definida a seguinte questão complementar:
+
+> **RQ3 — Em que medida as estratégias de pré-processamento alteram a tokenização
+> e a representação vetorial produzida pelo `all-mpnet-base-v2`, e essas alterações
+> estão associadas à estabilidade do ranking e ao desempenho de recuperação?**
+
+A RQ3 será operacionalizada em três frentes:
+
+- **RQ3a:** quanto P1–P4 alteram a tokenização em relação a P0?
+- **RQ3b:** quanto P1–P4 deslocam as representações vetoriais em relação a P0?
+- **RQ3c:** maior alteração da representação está associada a maior alteração do ranking?
+
+
+## 18.3 Artefatos de entrada congelados
+
+A extensão utilizará exclusivamente artefatos já produzidos no experimento:
+
+- corpus P0 com 6.900 chunks;
+- corpora P1–P4 com os mesmos 6.900 IDs;
+- 130 perguntas do SPAmazon-QA;
+- consultas P0–P4 já transformadas pelo código congelado de pré-processamento;
+- rankings controlados P0–P4 já produzidos;
+- métricas por questão já calculadas.
+
+O modelo de representação permanecerá:
+
+`sentence-transformers/all-mpnet-base-v2`
+
+Não será utilizado outro encoder nesta extensão.
+
+
+## 18.4 Unidade de análise
+
+Serão analisados dois níveis.
+
+### Consultas
+
+Para as 130 perguntas serão calculadas quatro comparações contra P0:
+
+`P0 x P1`
+`P0 x P2`
+`P0 x P3`
+`P0 x P4`
+
+Total:
+
+`130 perguntas x 4 comparações = 520 observações`
+
+As consultas constituirão a unidade principal para relacionar alteração da
+representação e alteração do retrieval.
+
+### Corpus
+
+Para os 6.900 chunks serão calculadas as mesmas quatro comparações:
+
+`6.900 chunks x 4 comparações = 27.600 observações`
+
+A análise do corpus terá caráter predominantemente descritivo e será utilizada
+para caracterizar o efeito das transformações sobre a representação documental.
+
+As 27.600 observações de chunks não serão tratadas como experimentos
+independentes para produzir inferências artificiais baseadas apenas no grande N.
+
+
+## 18.5 Análise de tokenização
+
+A tokenização será executada com o **tokenizer real associado ao
+`all-mpnet-base-v2`**, e não com divisão simples por espaços.
+
+Para cada texto serão registrados, quando tecnicamente disponíveis:
+
+- número de caracteres;
+- número de palavras para descrição textual;
+- número de tokens/subwords antes do truncamento;
+- número de tokens efetivamente fornecidos ao encoder;
+- diferença de tokens em relação a P0;
+- razão entre número de subwords e número de palavras;
+- igualdade exata ou não da sequência tokenizada entre P0 e Pk;
+- ocorrência de truncamento.
+
+Também serão registrados no arquivo de auditoria:
+
+- classe do tokenizer;
+- `model.max_seq_length`;
+- versão de `sentence-transformers`;
+- versão de `transformers`;
+- versão de Python.
+
+
+## 18.6 Análise de deriva dos embeddings
+
+Os textos P0–P4 serão codificados novamente exclusivamente para fins de análise,
+usando o mesmo encoder do experimento principal.
+
+Nenhuma normalização adicional será introduzida além do comportamento já
+adotado no pipeline do encoder.
+
+Para cada comparação P0 x Pk serão calculadas:
+
+- similaridade cosseno;
+- distância cosseno `1 - cosine_similarity`;
+- distância Euclidiana/L2 como medida complementar.
+
+A medida principal de deriva será:
+
+`embedding_drift = 1 - cosine(P0, Pk)`
+
+Os vetores completos de 768 dimensões não precisam ser persistidos em disco.
+Serão salvas apenas as métricas derivadas necessárias à análise e à auditoria.
+
+
+## 18.7 Estabilidade do ranking
+
+A estabilidade será calculada utilizando os rankings Top-10 já congelados.
+
+Para cada pergunta e variante Pk serão comparados os conjuntos Top-10 de P0 e Pk.
+
+Serão calculadas:
+
+- quantidade de `chunk_id` compartilhados no Top-10;
+- proporção de overlap Top-10;
+- índice de Jaccard entre os dois conjuntos Top-10.
+
+Definições:
+
+`overlap_top10 = |Top10(P0) inter Top10(Pk)| / 10`
+
+`jaccard_top10 = |intersecao| / |uniao|`
+
+Essa análise mede mudanças no ranking completo e complementa as métricas já
+existentes baseadas exclusivamente na posição do capítulo-alvo.
+
+
+## 18.8 Integração representação x retrieval
+
+Para cada uma das 520 combinações pergunta-variante será criada uma linha
+integrada contendo, no mínimo:
+
+- `id_questao`;
+- variante P1–P4;
+- métricas de alteração da tokenização;
+- `cosine_similarity_p0`;
+- `embedding_drift`;
+- distância L2;
+- `top10_overlap`;
+- `top10_jaccard`;
+- primeiro rank relevante em P0;
+- primeiro rank relevante em Pk;
+- `delta_rr_10`;
+- mudança de Hit@5;
+- status de entrada/saída/permanência no Top-5.
+
+O objetivo é investigar associações entre:
+
+`alteracao da tokenizacao -> deriva do embedding`
+
+`deriva do embedding -> estabilidade do Top-10`
+
+`deriva do embedding -> |delta RR@10|`
+
+`deriva do embedding -> transicao de Hit@5`
+
+
+## 18.9 Plano estatístico congelado antes da execução
+
+A inferência estatística será concentrada nas 130 consultas pareadas.
+
+### Comparação da deriva entre P1–P4
+
+Será aplicado teste de Friedman às quatro condições de deriva de embedding:
+
+`P1, P2, P3 e P4`
+
+Se houver diferença global, serão realizadas comparações pareadas de Wilcoxon
+entre variantes, com correção de Holm para múltiplas comparações.
+
+### Associação entre deriva e estabilidade do ranking
+
+Para cada variante P1–P4 será calculada correlação de Spearman entre:
+
+- `embedding_drift` e `top10_jaccard`;
+- `embedding_drift` e `abs(delta_rr_10)`.
+
+Cada família de quatro correlações receberá correção de Holm.
+
+Se uma das variáveis apresentar variância zero para determinada variante, a
+correlação será registrada como não definida.
+
+### Hit@5
+
+As transições de Hit@5 serão analisadas de forma descritiva em função da deriva
+de embedding, evitando inferência excessiva em grupos com poucas observações.
+
+
+## 18.10 Casos qualitativos previamente definidos
+
+A inspeção qualitativa utilizará prioritariamente casos já relevantes nas análises
+anteriores, evitando selecionar exemplos apenas depois de observar os novos
+resultados.
+
+Serão acompanhados:
+
+- Q11 — falha temporal persistente;
+- Q58 — P0/P1 com mesmo primeiro rank, mas composição Top-5 diferente;
+- Q65 — entrada do documento-alvo em P3/P4;
+- Q83 — aumento progressivo da presença do capítulo-alvo;
+- Q124 — ganho específico de retrieval produzido por P2.
+
+Esses casos terão função ilustrativa e não substituirão a análise quantitativa global.
+
+
+## 18.11 Artefatos planejados
+
+A implementação será concentrada em:
+
+`scripts/analyze_representation_shift.py`
+
+Arquivos planejados:
+
+**Dados derivados**
+
+- `results/raw/representation_shift_queries.csv`
+- `results/raw/representation_shift_chunks.csv`
+
+**Métricas**
+
+- `results/metrics/representation_shift_summary.csv`
+- `results/metrics/representation_tokenization_summary.csv`
+- `results/metrics/representation_ranking_stability.csv`
+- `results/metrics/representation_retrieval_correlations.csv`
+- `results/metrics/representation_statistical_tests.csv`
+
+**Casos**
+
+- `results/tables/representation_key_cases.csv`
+
+**Auditoria**
+
+- `results/runs/representation_shift_run.json`
+- `results/runs/representation_shift_summary.txt`
+
+**Figuras candidatas**
+
+- `results/figures_final/fig06_query_embedding_drift.png`
+- `results/figures_final/fig06_query_embedding_drift.pdf`
+- `results/figures_final/fig07_ranking_stability.png`
+- `results/figures_final/fig07_ranking_stability.pdf`
+
+Uma terceira figura só será produzida se acrescentar informação não redundante.
+
+
+## 18.12 Critérios de interpretação
+
+A extensão é exploratória.
+
+Mesmo que sejam observadas associações entre deriva de embedding e mudança de
+ranking, elas não serão descritas automaticamente como relações causais.
+
+Formulações aceitáveis incluem:
+
+- "maior deriva esteve associada a menor estabilidade do ranking";
+- "o resultado é consistente com a hipótese de que a transformação da
+  representação contribua para a alteração do retrieval";
+- "a associação observada ajuda a explicar o padrão experimental".
+
+Formulações a evitar incluem:
+
+- "a deriva causou a queda";
+- "stemming sempre destrói embeddings";
+- "stopwords são necessárias em todos os encoders densos".
+
+As conclusões permanecerão restritas ao corpus, encoder, idioma dos documentos
+e protocolo adotados neste estudo.
+
+
+## 18.13 Preflight computacional
+
+Antes do cálculo das novas métricas foi executado o preflight definido no
+protocolo.
+
+A validação confirmou:
+
+- 6.900 chunks em P0–P4;
+- hashes SHA-256 esperados para os cinco corpora;
+- igualdade dos IDs entre os cinco corpora;
+- 130 perguntas em cada variante;
+- P0 idêntica às perguntas originais do SPAmazon-QA;
+- 650 combinações questão-variante;
+- 6.500 posições Top-10;
+- IDs consistentes entre perguntas, rankings e métricas;
+- encoder `sentence-transformers/all-mpnet-base-v2`;
+- dimensionalidade igual a 768;
+- tokenizer `MPNetTokenizer`;
+- `model.max_seq_length = 384`.
+
+Ambiente da execução:
+
+- Python 3.13.3;
+- sentence-transformers 5.3.0;
+- transformers 5.4.0;
+- torch 2.11.0;
+- numpy 2.4.4;
+- pandas 3.0.2;
+- scipy 1.17.1.
+
+O preflight foi aprovado integralmente antes do início do cálculo dos embeddings.
+
+## 18.14 Execução da extensão mecanística
+
+Após a aprovação do preflight, foi executado:
+
+`scripts/analyze_representation_shift.py`
+
+O protocolo foi registrado como:
+
+`representation-shift-exploratory-v1`
+
+Foram analisadas:
+
+- 130 consultas em P0–P4;
+- 520 comparações P0 × P1–P4 no nível das consultas;
+- 6.900 chunks em P0–P4;
+- 27.600 comparações P0 × P1–P4 no nível do corpus.
+
+A execução completa levou aproximadamente 180,8 minutos em CPU.
+
+Não foi realizada nova recuperação vetorial. Os rankings Top-10 utilizados na
+análise de estabilidade foram os mesmos já congelados no experimento principal.
+
+
+## 18.15 Resultados de tokenização
+
+A tokenização foi obtida diretamente com o `MPNetTokenizer` associado ao
+`all-mpnet-base-v2`.
+
+### 18.15.1 Consultas
+
+| Variante | Subwords P0 | Subwords Pk | Δ médio | Mudança relativa média | Sequência alterada |
+|---|---:|---:|---:|---:|---:|
+| P1 | 21,469 | 21,469 | 0,000 | 0,00% | 0,0% |
+| P2 | 21,469 | 15,238 | -6,231 | 29,24% | 100,0% |
+| P3 | 21,469 | 21,500 | +0,031 | 0,75% | 99,2% |
+| P4 | 21,469 | 25,915 | +4,446 | 21,61% | 100,0% |
+
+P1 produziu exatamente a mesma sequência tokenizada de P0 nas 130 perguntas.
+
+P2 removeu, em média, 6,23 subwords por consulta.
+
+P3 alterou a sequência de tokens em 129 das 130 perguntas, mas o número médio
+de subwords permaneceu praticamente inalterado.
+
+P4 aumentou o comprimento tokenizado em aproximadamente 4,45 subwords por
+consulta.
+
+### 18.15.2 Chunks
+
+| Variante | Subwords P0 | Subwords Pk | Δ médio | Mudança relativa média | Sequência alterada |
+|---|---:|---:|---:|---:|---:|
+| P1 | 177,581 | 177,581 | 0,000 | 0,00% | 0,0% |
+| P2 | 177,581 | 152,824 | -24,756 | 14,36% | 99,29% |
+| P3 | 177,581 | 177,105 | -0,476 | 0,76% | 99,81% |
+| P4 | 177,581 | 204,007 | +26,427 | 16,03% | 100,0% |
+
+A razão média entre subwords e palavras nos chunks foi:
+
+- P0/P1: 1,554;
+- P2: 1,673;
+- P3: 1,549;
+- P4: 1,786.
+
+P4 apresentou a maior fragmentação subword.
+
+O número de chunks que ultrapassou o limite efetivo de sequência foi:
+
+- P0/P1: 21;
+- P2: 14;
+- P3: 21;
+- P4: 31.
+
+Assim, a remoção de stopwords em P2 reduziu ocorrências de truncamento, enquanto
+o stemming em P4 aumentou o número de textos truncados.
+
+
+## 18.16 Resultados de deriva dos embeddings
+
+A medida principal foi:
+
+`embedding_drift = 1 - cosine(P0, Pk)`
+
+### 18.16.1 Consultas
+
+| Variante | Cosseno médio | Drift médio | Drift mediano |
+|---|---:|---:|---:|
+| P1 | 1,000000 | ≈ 0,000000 | 0,000000 |
+| P2 | 0,930832 | 0,069168 | 0,064964 |
+| P3 | 0,960339 | 0,039661 | 0,030069 |
+| P4 | 0,812659 | 0,187341 | 0,160366 |
+
+### 18.16.2 Chunks
+
+| Variante | Cosseno médio | Drift médio | Drift mediano |
+|---|---:|---:|---:|
+| P1 | 1,000000 | ≈ 0,000000 | 0,000000 |
+| P2 | 0,976116 | 0,023884 | 0,017332 |
+| P3 | 0,984132 | 0,015868 | 0,011972 |
+| P4 | 0,878721 | 0,121279 | 0,108292 |
+
+A ordenação descritiva da perturbação foi a mesma para consultas e chunks:
+
+`P1 < P3 < P2 < P4`
+
+Os resíduos numéricos de drift observados em P1 são da ordem de precisão de
+ponto flutuante e não representam uma mudança substantiva da representação.
+
+O resultado de P1 é particularmente informativo: o lowercase externo não alterou
+a sequência produzida pelo tokenizer e, consequentemente, produziu embeddings
+numericamente equivalentes a P0.
+
+P3 alterou quase todas as sequências tokenizadas, mas manteve baixa deriva vetorial.
+Isso demonstra que alterar tokens não implica necessariamente grande deslocamento
+na representação semântica.
+
+P4 apresentou simultaneamente:
+
+- maior fragmentação subword;
+- maior número médio de subwords;
+- maior número de chunks truncados;
+- maior deriva dos embeddings.
+
+Esses resultados fornecem uma explicação mecanística plausível para a forte
+degradação de retrieval observada em P4, sem estabelecer causalidade.
+
+
+## 18.17 Testes estatísticos da deriva das consultas
+
+A comparação global entre P1–P4 foi realizada com Friedman:
+
+`χ² = 344,196305; p = 2,693528 × 10⁻74`
+
+A diferença global foi estatisticamente significativa.
+
+Conforme o plano congelado, foram realizados testes pareados de Wilcoxon entre
+as quatro variantes com correção de Holm:
+
+| Comparação | p bruto | p Holm |
+|---|---:|---:|
+| P1 × P2 | 4,460 × 10⁻23 | 2,676 × 10⁻22 |
+| P1 × P3 | 6,513 × 10⁻23 | 2,676 × 10⁻22 |
+| P1 × P4 | 4,460 × 10⁻23 | 2,676 × 10⁻22 |
+| P2 × P3 | 6,448 × 10⁻13 | 6,448 × 10⁻13 |
+| P2 × P4 | 4,139 × 10⁻20 | 8,278 × 10⁻20 |
+| P3 × P4 | 7,956 × 10⁻23 | 2,676 × 10⁻22 |
+
+Todas as seis comparações permaneceram significativas sob `α = 0,05`.
+
+Esses testes indicam que as quatro condições produziram níveis estatisticamente
+distinguíveis de perturbação da representação das consultas.
+
+
+## 18.18 Deriva vetorial e estabilidade do ranking
+
+A estabilidade do Top-10 foi analisada por overlap e índice de Jaccard entre os
+conjuntos recuperados em P0 e Pk.
+
+A associação principal definida no protocolo foi:
+
+`embedding_drift × top10_jaccard`
+
+Resultados:
+
+- P1: `rho = 0,0527; p = 0,551557; p_Holm = 0,757760`;
+- P2: `rho = -0,0778; p = 0,378880; p_Holm = 0,757760`;
+- P3: `rho = -0,1970; p = 0,024691; p_Holm = 0,074074`;
+- P4: `rho = -0,3375; p = 0,0000859; p_Holm = 0,000344`.
+
+Somente P4 permaneceu estatisticamente significativa após correção.
+
+Assim, dentro de P4, maior afastamento da representação em relação a P0 esteve
+associado à menor estabilidade do conjunto Top-10.
+
+A segunda família examinou:
+
+`embedding_drift × |ΔRR@10|`
+
+Resultados:
+
+- P1: correlação não definida devido à ausência de variação relevante;
+- P2: `rho = 0,0415; p = 0,638854; p_Holm = 1,000000`;
+- P3: `rho = 0,1228; p = 0,164062; p_Holm = 0,492187`;
+- P4: `rho = 0,2075; p = 0,017844; p_Holm = 0,071377`.
+
+Nenhuma variante permaneceu significativa nessa segunda família após correção
+de Holm.
+
+Portanto, a associação mais robusta observada na extensão é entre a deriva de P4
+e a estabilidade do ranking completo, e não entre deriva e mudança do
+Reciprocal Rank do capítulo-alvo isolado.
+
+
+## 18.19 Transições de Hit@5
+
+As transições de Hit@5 foram mantidas como análise descritiva.
+
+Em P4:
+
+- casos que permaneceram Hit@5: `n = 103`, drift médio = 0,179678;
+- casos que deixaram o Top-5: `n = 18`, drift médio = 0,224391;
+- casos que entraram no Top-5: `n = 2`, drift médio = 0,131028;
+- casos que permaneceram fora: `n = 7`, drift médio = 0,220907.
+
+Descritivamente, os casos em que o documento-alvo deixou o Top-5 apresentaram
+maior deriva média que os casos que permaneceram com sucesso.
+
+Nenhum teste inferencial adicional foi introduzido para esses pequenos grupos.
+
+
+## 18.20 Figuras da extensão
+
+A execução produziu:
+
+- `results/figures_final/fig06_query_embedding_drift.png`
+- `results/figures_final/fig06_query_embedding_drift.pdf`
+- `results/figures_final/fig07_ranking_stability.png`
+- `results/figures_final/fig07_ranking_stability.pdf`
+
+Após inspeção visual, foi produzida também uma figura combinada pelo script:
+
+`scripts/generate_mechanistic_combined_figure.py`
+
+Arquivos:
+
+- `results/figures_final/fig08_representation_mechanism_combined.png`
+- `results/figures_final/fig08_representation_mechanism_combined.pdf`
+
+A figura combinada apresenta:
+
+1. painel (a): distribuição da deriva dos embeddings das consultas em P1–P4;
+2. painel (b): relação entre `embedding_drift` e Jaccard do Top-10, com destaque
+   para a associação significativa observada em P4.
+
+Para o artigo científico final, a seleção principal de figuras passa a ser:
+
+- `fig05_retrieval_global`;
+- `fig08_representation_mechanism_combined`;
+- `fig02_downstream_delta`.
+
+`fig04_hit5_vs_score`, `fig06_query_embedding_drift` e
+`fig07_ranking_stability` permanecem como resultados complementares.
+
+
+## 18.21 Artefatos produzidos
+
+**Dados derivados**
+
+- `results/raw/representation_shift_queries.csv`
+- `results/raw/representation_shift_chunks.csv`
+
+**Métricas**
+
+- `results/metrics/representation_shift_summary.csv`
+- `results/metrics/representation_tokenization_summary.csv`
+- `results/metrics/representation_ranking_stability.csv`
+- `results/metrics/representation_retrieval_correlations.csv`
+- `results/metrics/representation_statistical_tests.csv`
+
+**Casos**
+
+- `results/tables/representation_key_cases.csv`
+
+**Auditoria**
+
+- `results/runs/representation_shift_run.json`
+- `results/runs/representation_shift_summary.txt`
+
+A execução principal foi realizada por:
+
+`scripts/analyze_representation_shift.py`
+
+
+## 18.22 Interpretação integrada da RQ3
+
+A extensão mecanística mostrou que o efeito das transformações não pode ser
+descrito apenas pela quantidade de caracteres ou tokens removidos.
+
+P1 foi representacionalmente neutro: as sequências tokenizadas permaneceram
+idênticas a P0 e os embeddings foram numericamente equivalentes.
+
+P3 modificou quase todas as sequências tokenizadas, porém preservou melhor a
+geometria semântica do encoder, apresentando a menor deriva entre as variantes
+que realmente alteraram a entrada do MPNet.
+
+P2 removeu uma parcela substancial dos subwords e apresentou deriva intermediária.
+A redução de truncamento observada em P2 não impediu a degradação do retrieval,
+indicando que o comprimento do texto, isoladamente, não explica o resultado.
+
+P4 produziu o padrão mais disruptivo: aumentou a fragmentação subword, o número
+de tokens e os truncamentos, além de gerar a maior deriva vetorial. Dentro de P4,
+maior deriva também esteve significativamente associada à menor estabilidade do
+Top-10 após correção de Holm.
+
+Esses resultados são consistentes com a hipótese de que transformações lexicais
+mais agressivas podem perturbar a representação esperada por um encoder
+contextual pré-treinado sobre linguagem natural.
+
+A evidência é mecanisticamente informativa, mas continua observacional dentro
+do experimento. Não se afirma que a deriva seja, por si só, a causa exclusiva da
+degradação do retrieval.
+
+
+## 18.23 Encerramento definitivo da etapa experimental
+
+Com a conclusão da RQ3, o trabalho passa a conter quatro camadas complementares
+de evidência:
+
+1. transformação linguística e tokenização;
+2. alteração da representação vetorial;
+3. recuperação e estabilidade do ranking;
+4. propagação downstream para contexto RAG e resposta.
+
+A cadeia experimental consolidada é:
+
+`pré-processamento -> tokenização -> embedding -> ranking -> contexto RAG -> resposta`
+
+A etapa experimental está encerrada.
+
+Não estão previstas novas variantes, novos encoders, novas respostas RAG ou novas
+avaliações com outro Juiz LLM apenas para alterar os resultados observados.
+
+A próxima fase do projeto é a redação do artigo científico final no Overleaf e,
+posteriormente, a preparação da apresentação.

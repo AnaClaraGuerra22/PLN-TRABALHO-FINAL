@@ -1,0 +1,158 @@
+{
+  "timestamp": "2026-10-20T03:16:08.018714-03:00",
+  "protocol_version": "representation-shift-exploratory-v1",
+  "analysis_nature": "post-result exploratory mechanistic analysis",
+  "rq3": "Em que medida as estratégias de pré-processamento alteram a tokenização e a representação vetorial produzida pelo all-mpnet-base-v2, e essas alterações estão associadas à estabilidade do ranking e ao desempenho de recuperação?",
+  "model": {
+    "name": "sentence-transformers/all-mpnet-base-v2",
+    "embedding_dimension": 768,
+    "device": "cpu",
+    "batch_size": 64,
+    "tokenizer_class": "MPNetTokenizer",
+    "max_seq_length": 384,
+    "normalize_embeddings": false,
+    "offline_mode": true
+  },
+  "environment": {
+    "python": "3.13.3",
+    "sentence_transformers": "5.3.0",
+    "transformers": "5.4.0",
+    "torch": "2.11.0",
+    "numpy": "2.4.4",
+    "pandas": "3.0.2",
+    "scipy": "1.17.1",
+    "matplotlib": "3.10.8"
+  },
+  "inputs": {
+    "corpus_sha256": {
+      "P0": "1fce41571ca46ccca48c9aaf2fc07013aa7fe6bd215305350365eb451a73fae8",
+      "P1": "0e1efcd0f921f08956529d89eb0ff267d221fbf494458c655e5e7e6eff1c3c6a",
+      "P2": "48dc79cf004d56c5f25905532564fc8a0f4018f6c15fdbe241c2e6b2f8103447",
+      "P3": "ae8b5ad596327372a3b5b6cf8e92a422db99ac45daae7e8f288e86e325302e99",
+      "P4": "70fd5435015ba57aea468b8148190c1cc619e69796b8b33c6871cbb55ca62ded"
+    },
+    "question_sources": {
+      "P0": {
+        "mode": "frozen_file",
+        "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\data\\processed\\p0_questions.jsonl",
+        "sha256": "39cff97c889abaa487a4d8937c30c180b39619b8080b5d506a9771750b1fed4c"
+      },
+      "P1": {
+        "mode": "frozen_file",
+        "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\data\\processed\\p1_questions.jsonl",
+        "sha256": "af3d568de1353f48408fcc29fead75f69e094100fb2702347128c4ef75931144"
+      },
+      "P2": {
+        "mode": "frozen_file",
+        "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\data\\processed\\p2_questions.jsonl",
+        "sha256": "31e54cda5451e7e26bb92c4a4d142125e002783647460c8c6b8519d15e341dac"
+      },
+      "P3": {
+        "mode": "frozen_file",
+        "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\data\\processed\\p3_questions.jsonl",
+        "sha256": "9156f4c3b975dd1e0dd93403a91aee9d5ba89c3699c12e924a487833c49d5bff"
+      },
+      "P4": {
+        "mode": "frozen_file",
+        "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\data\\processed\\p4_questions.jsonl",
+        "sha256": "1f10f191672c26028d558a12294f9264ef4bc368ec41ed5d2af3bbc24bd0f2ac"
+      }
+    },
+    "controlled_rankings_path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\raw\\controlled_rankings.csv",
+    "controlled_rankings_sha256": "5ded1f649975a15ef238e1cbd9b2504656355aa5d8ed17db862ff371129ee6d2",
+    "question_metrics_path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\metrics\\controlled_question_metrics.csv",
+    "question_metrics_sha256": "1bb5dd1107f2a254693b9157e978eef8551144e33f975cc1c1348004dc7166e0",
+    "controlled_retrieval_run_path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\runs\\controlled_retrieval_run.json",
+    "controlled_retrieval_run_sha256": "e1600e741c56f8ccc8899f0a7f5f77e3f046d5b29998306e5a6593268d99d491",
+    "preprocess_path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\src\\preprocess.py",
+    "preprocess_sha256": "050aec627d8da62fac2f0b8e364fdc9d3102368f1464b17240187e964aca6610"
+  },
+  "counts": {
+    "query_comparisons": 520,
+    "chunk_comparisons": 27600,
+    "questions": 130,
+    "chunks": 6900,
+    "comparison_variants": [
+      "P1",
+      "P2",
+      "P3",
+      "P4"
+    ]
+  },
+  "headline_results": {
+    "query_mean_drift": {
+      "P1": 3.255330599271334e-08,
+      "P2": 0.06916777858367333,
+      "P3": 0.039660652325703545,
+      "P4": 0.18734062084784875
+    },
+    "chunk_mean_drift": {
+      "P1": 2.8852103413015173e-08,
+      "P2": 0.023884414192559062,
+      "P3": 0.015868224406587906,
+      "P4": 0.12127859392027925
+    },
+    "query_token_sequence_equal_percent": {
+      "P1": 100.0,
+      "P2": 0.0,
+      "P3": 0.7692307692307693,
+      "P4": 0.0
+    },
+    "friedman_p": 2.6935282208658953e-74
+  },
+  "elapsed_seconds": 10845.403662204742,
+  "outputs": {
+    "representation_shift_queries.csv": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\raw\\representation_shift_queries.csv",
+      "sha256": "8db09fad79c45178e2d556f366ae6f1c7c1b3c98b6aab81ede6c0572967a439c"
+    },
+    "representation_shift_chunks.csv": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\raw\\representation_shift_chunks.csv",
+      "sha256": "d9fbb0b6b2119c8be4ede4c390148c1319bc3b1797ae118caefdf661207e17ea"
+    },
+    "representation_shift_summary.csv": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\metrics\\representation_shift_summary.csv",
+      "sha256": "241520ecff66af83a9a386e44d0a4641363c2cf50c0705e9c9a5ab292e8c3d15"
+    },
+    "representation_tokenization_summary.csv": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\metrics\\representation_tokenization_summary.csv",
+      "sha256": "2f3f4f73c19ec883db738f2f8d5029d9d2562c6aa807af658aeaa4413c4a3cbc"
+    },
+    "representation_ranking_stability.csv": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\metrics\\representation_ranking_stability.csv",
+      "sha256": "fc7fdcd4e14de549a5c2abbdcb57a89ff60c070f06c4b8325b4999eb0809cfd9"
+    },
+    "representation_retrieval_correlations.csv": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\metrics\\representation_retrieval_correlations.csv",
+      "sha256": "4a7e982e48b833315ad26b28b6bd4911fba7400755b115e638f0ee01e2ac2301"
+    },
+    "representation_statistical_tests.csv": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\metrics\\representation_statistical_tests.csv",
+      "sha256": "8c97ece9e13cb2ff85d74c73085a54f531aabeb9c88bb98c9b3b0af369c63e6d"
+    },
+    "representation_key_cases.csv": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\tables\\representation_key_cases.csv",
+      "sha256": "346afeb806a991daea674d1613be1f03513c702c325fd5f4f9643ccaf20caeaa"
+    },
+    "representation_shift_summary.txt": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\runs\\representation_shift_summary.txt",
+      "sha256": "28a5e1a02ca11ed7442e0a4f687bf1c1c16e19ae4a5827ba67378a5fd2c0beb7"
+    },
+    "fig06_query_embedding_drift.png": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\figures_final\\fig06_query_embedding_drift.png",
+      "sha256": "77b265feb9039a1d5164addb7c735f603085998124cd1e11defed2aa4554ab46"
+    },
+    "fig06_query_embedding_drift.pdf": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\figures_final\\fig06_query_embedding_drift.pdf",
+      "sha256": "5e46d3d4cc01258a365df1d38edc195723e0828f29a7a502ea6016bdc6c41260"
+    },
+    "fig07_ranking_stability.png": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\figures_final\\fig07_ranking_stability.png",
+      "sha256": "4ac0eb9f43c462bb45004b9c96fcb55a22bcf0990a4a36b386ec8451c4554848"
+    },
+    "fig07_ranking_stability.pdf": {
+      "path": "C:\\Users\\anacl\\OneDrive\\Área de Trabalho\\MESTRADO\\I periodo\\INF 791 - PLN\\TRAB FINAL\\results\\figures_final\\fig07_ranking_stability.pdf",
+      "sha256": "adc3918451b0bdbc51db970ba7b4b97839373674228609d0cc01d78cce8289b2"
+    }
+  }
+}

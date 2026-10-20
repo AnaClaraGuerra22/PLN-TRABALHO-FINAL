@@ -1,0 +1,9 @@
+﻿family,variant,x,y,n,rho,p_raw,p_holm_4,alpha,significant_holm,status
+drift_vs_top10_jaccard,P1,embedding_drift,top10_jaccard,130,0.05269517868004628,0.5515570270901314,0.7577604167223095,0.05,False,executed
+drift_vs_top10_jaccard,P2,embedding_drift,top10_jaccard,130,-0.0778121457679073,0.37888020836115477,0.7577604167223095,0.05,False,executed
+drift_vs_top10_jaccard,P3,embedding_drift,top10_jaccard,130,-0.196972905494511,0.02469125290050306,0.07407375870150919,0.05,False,executed
+drift_vs_top10_jaccard,P4,embedding_drift,top10_jaccard,130,-0.33754667195620724,8.588331295616426e-05,0.000343533251824657,0.05,True,executed
+drift_vs_abs_delta_rr10,P1,embedding_drift,abs_delta_rr_10,130,,,,0.05,False,undefined_zero_variance_or_insufficient_n
+drift_vs_abs_delta_rr10,P2,embedding_drift,abs_delta_rr_10,130,0.04154395985997462,0.6388538695012679,1.0,0.05,False,executed
+drift_vs_abs_delta_rr10,P3,embedding_drift,abs_delta_rr_10,130,0.12276945545113702,0.16406241449091613,0.4921872434727484,0.05,False,executed
+drift_vs_abs_delta_rr10,P4,embedding_drift,abs_delta_rr_10,130,0.20749826631987575,0.017844123303541706,0.07137649321416682,0.05,False,executed

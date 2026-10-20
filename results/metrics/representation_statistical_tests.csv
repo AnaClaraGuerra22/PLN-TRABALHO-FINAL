@@ -1,0 +1,8 @@
+﻿family,comparison,test,n,statistic,p_raw,p_holm,alpha,significant,status
+embedding_drift_between_variants,P1-P4,Friedman,130,344.1963048498849,2.6935282208658953e-74,,0.05,True,executed
+embedding_drift_pairwise,P1_vs_P2,Wilcoxon pareado,130,0.0,4.4596816413765627e-23,2.6758089848259375e-22,0.05,True,executed
+embedding_drift_pairwise,P1_vs_P3,Wilcoxon pareado,130,0.0,6.513351079976358e-23,2.6758089848259375e-22,0.05,True,executed
+embedding_drift_pairwise,P1_vs_P4,Wilcoxon pareado,130,0.0,4.4596816413765627e-23,2.6758089848259375e-22,0.05,True,executed
+embedding_drift_pairwise,P2_vs_P3,Wilcoxon pareado,130,1163.0,6.448061831977788e-13,6.448061831977788e-13,0.05,True,executed
+embedding_drift_pairwise,P2_vs_P4,Wilcoxon pareado,130,305.0,4.138984459656513e-20,8.277968919313026e-20,0.05,True,executed
+embedding_drift_pairwise,P3_vs_P4,Wilcoxon pareado,130,25.0,7.955604938890289e-23,2.6758089848259375e-22,0.05,True,executed

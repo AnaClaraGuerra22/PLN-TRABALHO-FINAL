@@ -1,0 +1,50 @@
+EXTENSÃO MECANÍSTICA RQ3 — RESUMO REPRODUZÍVEL
+================================================================
+
+Protocolo: representation-shift-exploratory-v1
+Natureza: análise mecanística exploratória pós-resultados.
+
+1) DERIVA DOS EMBEDDINGS — CONSULTAS
+- P1: cos médio=1.000000; drift médio=0.000000; drift mediano=0.000000; tokens idênticos=100.0%
+- P2: cos médio=0.930832; drift médio=0.069168; drift mediano=0.064964; tokens idênticos=0.0%
+- P3: cos médio=0.960339; drift médio=0.039661; drift mediano=0.030069; tokens idênticos=0.8%
+- P4: cos médio=0.812659; drift médio=0.187341; drift mediano=0.160366; tokens idênticos=0.0%
+
+2) TOKENIZAÇÃO — CONSULTAS
+- P1: Δ subwords médio=+0.000; mudança média relativa=0.00%; sequência alterada=0.0%
+- P2: Δ subwords médio=-6.231; mudança média relativa=29.24%; sequência alterada=100.0%
+- P3: Δ subwords médio=+0.031; mudança média relativa=0.75%; sequência alterada=99.2%
+- P4: Δ subwords médio=+4.446; mudança média relativa=21.61%; sequência alterada=100.0%
+
+3) TESTE GLOBAL DE DERIVA
+- Friedman: estatística=344.196305; p=2.6935282e-74
+
+4) DERIVA × ESTABILIDADE DO RETRIEVAL
+- Família: drift_vs_top10_jaccard
+  P1: rho=0.0527; p=0.551557; p_Holm=0.75776
+  P2: rho=-0.0778; p=0.37888; p_Holm=0.75776
+  P3: rho=-0.1970; p=0.0246913; p_Holm=0.0740738
+  P4: rho=-0.3375; p=8.58833e-05; p_Holm=0.000343533
+- Família: drift_vs_abs_delta_rr10
+  P1: correlação não definida (variância zero ou N insuficiente).
+  P2: rho=0.0415; p=0.638854; p_Holm=1
+  P3: rho=0.1228; p=0.164062; p_Holm=0.492187
+  P4: rho=0.2075; p=0.0178441; p_Holm=0.0713765
+
+5) TRANSIÇÕES HIT@5
+- P1 / stayed_hit: n=121; drift médio=0.000000
+- P1 / stayed_miss: n=9; drift médio=0.000000
+- P2 / entered_top5: n=1; drift médio=0.058709
+- P2 / left_top5: n=14; drift médio=0.077409
+- P2 / stayed_hit: n=107; drift médio=0.068630
+- P2 / stayed_miss: n=8; drift médio=0.063239
+- P3 / entered_top5: n=2; drift médio=0.036179
+- P3 / left_top5: n=5; drift médio=0.061655
+- P3 / stayed_hit: n=116; drift médio=0.039330
+- P3 / stayed_miss: n=7; drift médio=0.030428
+- P4 / entered_top5: n=2; drift médio=0.131028
+- P4 / left_top5: n=18; drift médio=0.224391
+- P4 / stayed_hit: n=103; drift médio=0.179678
+- P4 / stayed_miss: n=7; drift médio=0.220907
+
+INTERPRETAÇÃO: esta extensão é exploratória. Associações entre deriva e ranking não devem ser descritas automaticamente como relações causais.
