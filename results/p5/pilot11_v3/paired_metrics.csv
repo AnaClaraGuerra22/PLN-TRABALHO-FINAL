@@ -1,0 +1,2 @@
+﻿id_questao,tipo,dificuldade,target,P0_first_rank,P0_mrr10,P0_hit1,P0_hit3,P0_hit5,P0_hit10,P5_first_rank,P5_mrr10,P5_hit1,P5_hit3,P5_hit5,P5_hit10,delta_hit1,delta_hit3,delta_hit5,delta_hit10,delta_mrr10
+11,Direct,Easy,chapter_17,,0.0,0,0,0,0,,0.0,0,0,0,0,0,0,0,0,0.0

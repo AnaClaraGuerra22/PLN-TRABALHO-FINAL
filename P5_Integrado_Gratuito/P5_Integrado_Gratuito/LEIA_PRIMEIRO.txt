@@ -1,0 +1,1 @@
+P5 Gratuito (Ollama local). Copie arquivos para as pastas equivalentes do projeto; substitua apenas os arquivos P5. Veja docs/P5_QUERY_REWRITING.md. Sem OpenAI API.

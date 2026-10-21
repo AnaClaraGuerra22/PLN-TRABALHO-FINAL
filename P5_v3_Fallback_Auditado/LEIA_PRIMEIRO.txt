@@ -1,0 +1,12 @@
+P5 v3: avaliador auditado, sem alterar P0-P4 ou a geração do Ollama.
+
+Este pacote contém:
+- scripts/run_p5_query_rewriting.py: atualiza SOMENTE o avaliador P5
+- tests/test_p5_query_rewriting.py: testes automatizados
+- files/review_auditada.csv: 130 questões, 87 aprovadas, 43 não aprovadas
+- files/auditoria_detalhada.csv: categorias semânticas e justificativas
+- files/auditoria_completa.xlsx: revisão detalhada
+- docs/P5_FALLBACK_AUDITADO.md: documentação técnica com comandos
+
+Extraia o ZIP dentro da pasta TRAB FINAL e siga docs/P5_FALLBACK_AUDITADO.md.
+Não sobrescreva paraphrases.jsonl nem o review.csv original!

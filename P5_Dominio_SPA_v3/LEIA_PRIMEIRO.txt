@@ -1,0 +1,10 @@
+P5 v3 — CONTEXTO DE DOMÍNIO SPA — 100% LOCAL COM OLLAMA
+
+1. Preserve results/p5/paraphrases.jsonl e review.csv da v2 em results/p5/pilot_prompt_v2/ ANTES de instalar/gerar.
+2. Extraia este ZIP na raiz TRAB FINAL e copie scripts/, tests/ e docs/ para as pastas existentes.
+3. Rode os testes: python -m unittest discover -s tests -p "test_p5_query_rewriting.py" -v (7 testes).
+4. Gere Q11: python .\scripts\run_p5_query_rewriting.py generate --ids 11 --llm qwen2.5:3b
+5. Revise: python .\scripts\run_p5_query_rewriting.py review
+6. Envie results/p5/review.csv para análise sem alterar o campo approved ou consultar o índice.
+
+COMANDOS COMPLETOS e explicações: docs/P5_QUERY_REWRITING.md

@@ -1,0 +1,26 @@
+{
+  "protocol": "P5-query-rewriting-paired-v1",
+  "ids": [
+    11
+  ],
+  "questions_sha256": "39cff97c889abaa487a4d8937c30c180b39619b8080b5d506a9771750b1fed4c",
+  "paraphrases_sha256": "da6de7d65cdd4549d99fc3967c16e739ef4331563b9ef6597b98abbc1c586dea",
+  "review_sha256": "90a50a93c1dfe413fcd545d94b46fbb5106819730b18cdea3b0829ed0998ddf6",
+  "history_sha256": "5ded1f649975a15ef238e1cbd9b2504656355aa5d8ed17db862ff371129ee6d2",
+  "database_path": "C:\\PLN_EXPERIMENTOS\\VECTOR_DB_CONTROLLED\\P0",
+  "collection": "langchain",
+  "n_chunks": 6900,
+  "prompt_version": "domain-aware-spa-v3",
+  "prompt_sha256": "72b79953b9d84c9ebb131cd71f9e4885380a61bf9323498ca2a2eac345ff5f03",
+  "ollama_model_tag": "qwen2.5:3b",
+  "ollama_options": {
+    "temperature": 0,
+    "seed": 42,
+    "num_predict": 256,
+    "num_ctx": 2048
+  },
+  "encoder": "sentence-transformers/all-mpnet-base-v2",
+  "top_k": 10,
+  "historical_p0_parity": true,
+  "timestamp_utc": "2026-10-21T00:30:44.207203+00:00"
+}

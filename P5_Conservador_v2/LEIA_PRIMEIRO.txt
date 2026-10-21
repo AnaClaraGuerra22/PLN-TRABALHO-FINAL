@@ -1,0 +1,1 @@
+P5 v2 gratuito: prompt conservador global para preservar termos tecnicos. Copie docs/, scripts/, tests/ para seu projeto. Antes de gerar novamente, ARQUIVE results/p5/paraphrases.jsonl e results/p5/review.csv da v1 (veja docs/P5_QUERY_REWRITING.md).
